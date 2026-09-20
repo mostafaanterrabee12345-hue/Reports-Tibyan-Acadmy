@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أكاديمية تبيان - نظام التقارير الشامل</title>
+
+    <link rel="icon" type="image/png" sizes="32x32" href="logo.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="logo.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="logo.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0b532c">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-green: #0a4f28;
+            --emerald-green: #12743e;
+            --accent-gold: #d4af37;
+            --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            --bg-glass: rgba(255, 255, 255, 0.95);
+            --card-border: #d4af37;
+            --text-dark: #1a2e22;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0e3d22 0%, #051e10 100%);
+            color: var(--text-dark);
+            padding: 15px 10px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 980px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media (min-width: 880px) {
+            .app-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .app-header {
+            background: rgba(10, 79, 40, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 16px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #fff;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .header-logo {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent-gold);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+
+        .header-title h1 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .header-title p {
+            font-size: 0.75rem;
+            color: var(--accent-gold);
+        }
+
+        /* Nav Tabs Switcher */
+        .type-switcher {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            background: rgba(0, 0, 0, 0.25);
+            padding: 5px;
+            border-radius: 14px;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            margin-bottom: 10px;
+            gap: 4px;
+        }
+
+        @media (min-width: 500px) {
+            .type-switcher {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 768px) {
+            .type-switcher {
+                grid-template-columns: repeat(6, 1fr);
+            }
+        }
+
+        .tab-btn {
+            padding: 8px 4px;
+            border: none;
+            border-radius: 10px;
+            background: transparent;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.72rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            text-align: center;
+        }
+
+        .tab-btn.active {
+            background: var(--gold-gradient);
+            color: #051e10;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-card {
+            background: var(--bg-glass);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: var(--primary-green);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin: 12px 0 8px 0;
+            border: 1px solid var(--accent-gold);
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #2e4d39;
+        }
+
+        .form-control, select, input[type="text"], input[type="date"], input[type="number"], input[type="month"], input[type="time"], textarea {
+            width: 100%;
+            padding: 9px 12px;
+            border: 1.5px solid #c8d6cd;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            background-color: #fff;
+            outline: none;
+            transition: all 0.25s ease;
+        }
+
+        .form-control:focus, select:focus, input:focus, textarea:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 3px rgba(10, 79, 40, 0.15);
+        }
+
+        .prayer-inputs {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 5px;
+            background: #eef4f0;
+            padding: 8px;
+            border-radius: 10px;
+        }
+
+        .prayer-item {
+            text-align: center;
+        }
+
+        .prayer-item label {
+            font-size: 0.72rem;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .prayer-item select {
+            padding: 3px;
+            font-size: 0.78rem;
+            border-radius: 6px;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .btn {
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 0.92rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary { 
+            background: linear-gradient(135deg, var(--primary-green), var(--emerald-green)); 
+            color: white; 
+            box-shadow: 0 4px 15px rgba(10, 79, 40, 0.3);
+        }
+
+        .btn-whatsapp { 
+            background: linear-gradient(135deg, #25D366, #128C7E); 
+            color: white; 
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+        }
+
+        .preview-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Card Style */
+        .report-card {
+            width: 100%;
+            max-width: 450px;
+            background: #faf8f2;
+            border: 6px solid #fff;
+            border-radius: 24px;
+            padding: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .card-inner-border {
+            border: 2px solid var(--card-border);
+            border-radius: 16px;
+            padding: 14px;
+            background: #ffffff;
+        }
+
+        .card-logo-wrapper {
+            position: relative;
+            width: 85px;
+            height: 85px;
+            margin: 0 auto 8px auto;
+        }
+
+        .card-logo-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 50%;
+            padding: 4px;
+            background: #fff;
+            border: 2px solid var(--accent-gold);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .header-section {
+            text-align: center;
+            border-bottom: 2px dashed var(--accent-gold);
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        .academy-name {
+            font-family: 'Amiri', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            line-height: 1.1;
+        }
+
+        .report-title {
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: #d4af37;
+            background: #0a4f28;
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 12px;
+            margin-top: 5px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            margin-bottom: 10px;
+            font-size: 0.82rem;
+            background: rgba(10, 79, 40, 0.04);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 8px;
+            border-radius: 8px;
+        }
+
+        .detail-row {
+            padding: 5px 0;
+            border-bottom: 1px dashed #e5e7eb;
+            font-size: 0.83rem;
+        }
+
+        .detail-label {
+            font-weight: 700;
+            color: var(--primary-green);
+            display: block;
+            margin-bottom: 1px;
+        }
+
+        .detail-value {
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .highlight-box {
+            margin: 8px 0;
+            background: rgba(212, 175, 55, 0.08);
+            border: 1.5px dashed var(--accent-gold);
+            border-radius: 8px;
+            padding: 8px;
+        }
+
+        .box-title {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--primary-green);
+            margin-bottom: 4px;
+            text-align: center;
+        }
+
+        .prayer-section {
+            margin: 10px 0;
+            background: #fff;
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 6px;
+            text-align: center;
+        }
+
+        .prayer-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            margin-bottom: 4px;
+        }
+
+        .prayer-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 3px;
+            font-size: 0.75rem;
+        }
+
+        .prayer-box {
+            background: #f9fafb;
+            padding: 3px;
+            border-radius: 4px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .notes-box {
+            background-color: #fff;
+            border-right: 3px solid var(--primary-green);
+            border-left: 1px solid #e5e7eb;
+            border-top: 1px solid #e5e7eb;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 6px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            color: #374151;
+            margin-top: 8px;
+        }
+
+        .footer-section {
+            text-align: center;
+            margin-top: 12px;
+            padding-top: 8px;
+            border-top: 1px solid var(--accent-gold);
+            font-family: 'Amiri', serif;
+            font-size: 0.95rem;
+            color: var(--primary-green);
+            font-weight: 700;
+        }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    
+    <div class="form-card">
+        
+        <div class="app-header" style="margin-bottom: 15px;">
+            <img src="./logo.png" alt="Logo" class="header-logo">
+            <div class="header-title">
+                <h1>أكاديمية تبيان</h1>
+                <p>لوحة التحكم بالتقارير الشاملة</p>
+            </div>
+        </div>
+
+        <div class="type-switcher">
+            <button class="tab-btn active" id="tabDailyBtn" onclick="switchReportType('daily')">📜 يومي</button>
+            <button class="tab-btn" id="tabNoorBtn" onclick="switchReportType('noor')">📖 نور البيان وعربى وبرامج اخرى</button>
+            <button class="tab-btn" id="tabMonthlyBtn" onclick="switchReportType('monthly')">🏆 شهري</button>
+            <button class="tab-btn" id="tabAbsenceBtn" onclick="switchReportType('absence')">⚠️ بدون عذر</button>
+            <button class="tab-btn" id="tabExcusedBtn" onclick="switchReportType('excused')">🟢 بعذر</button>
+            <button class="tab-btn" id="tabPostponeBtn" onclick="switchReportType('postpone')">⏳ تأجيل</button>
+        </div>
+
+        <div id="dailyForm">
+            <span class="section-badge">👤 المعلومات الأساسية</span>
+            
+            <div class="form-group">
+                <label>اسم الطالب:</label>
+                <input type="text" id="studentNameInput" class="form-control" placeholder="أدخل اسم الطالب..." oninput="updateCard()">
+            </div>
+
+            <div class="form-group">
+                <label>اسم المعلم:</label>
+                <input type="text" id="teacherNameInput" class="form-control" placeholder="أدخل اسم المعلم..." oninput="updateCard()">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <div class="form-group">
+                    <label>التاريخ:</label>
+                    <input type="date" id="dateInput" class="form-control" onchange="updateCard()">
+                </div>
+
+                <div class="form-group">
+                    <label>رقم الحلقة:</label>
+                    <select id="sessionNumInput" class="form-control" onchange="updateCard()">
+                        <option value="الحلقة 1">الحلقة 1</option>
+                        <option value="الحلقة 2">الحلقة 2</option>
+                        <option value="الحلقة 3">الحلقة 3</option>
+                        <option value="الحلقة 4">الحلقة 4</option>
+                        <option value="الحلقة 5">الحلقة 5</option>
+                        <option value="الحلقة 6">الحلقة 6</option>
+                        <option value="الحلقة 7">الحلقة 7</option>
+                        <option value="الحلقة 8">الحلقة 8</option>
+                        <option value="الحلقة 9">الحلقة 9</option>
+                        <option value="الحلقة 10">الحلقة 10</option>
+                        <option value="الحلقة 11">الحلقة 11</option>
+                        <option value="الحلقة 12">الحلقة 12</option>
+                        <option value="الحلقة 13">الحلقة 13</option>
+                        <option value="الحلقة 14">الحلقة 14</option>
+                        <option value="الحلقة 15">الحلقة 15</option>
+                        <option value="الحلقة 16">الحلقة 16</option>
+                        <option value="الحلقة 17">الحلقة 17</option>
+                        <option value="الحلقة 18">الحلقة 18</option>
+                        <option value="الحلقة 19">الحلقة 19</option>
+                        <option value="الحلقة 20">الحلقة 20</option>
+                        <option value="الحلقة 21">الحلقة 21</option>
+                        <option value="الحلقة 22">الحلقة 22</option>
+                        <option value="الحلقة 23">الحلقة 23</option>
+                        <option value="الحلقة 24">الحلقة 24</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>مدة الحلقة:</label>
+                <select id="durationInput" class="form-control" onchange="updateCard()">
+                    <option value="30 دقيقة">30 دقيقة</option>
+                    <option value="45 دقيقة" selected>45 دقيقة</option>
+                    <option value="60 دقيقة">60 دقيقة</option>
+                </select>
+            </div>
+
+            <span class="section-badge">📖 إنجاز حلقة اليوم</span>
+
+            <div class="form-group">
+                <label>الحفظ الجديد:</label>
+                <input type="text" id="newMemorizeInput" class="form-control" placeholder="أدخل الحفظ الجديد..." oninput="updateCard()">
+            </div>
+
+            <div class="form-group">
+                <label>المراجعة:</label>
+                <input type="text" id="reviewInput" class="form-control" placeholder="أدخل المراجعة..." oninput="updateCard()">
+            </div>
+
+            <div class="form-group">
+                <label>ما دُرس في أحكام التجويد:</label>
+                <input type="text" id="tajweedInput" class="form-control" placeholder="أدخل ما تم دراسته..." oninput="updateCard()">
+            </div>
+
+            <div class="form-group">
+                <label>التقييم العام للحلقة:</label>
+                <select id="ratingInput" class="form-control" onchange="updateCard()">
+                    <option value="ممتاز ⭐⭐⭐">ممتاز ⭐⭐⭐</option>
+                    <option value="جيد جداً ⭐⭐">جيد جداً ⭐⭐</option>
+                    <option value="جيد ⭐">جيد ⭐</option>
+                    <option value="يحتاج إلى مراجعة وتطوير ⚠️">يحتاج إلى مراجعة وتطوير ⚠️</option>
+                </select>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 8px;">
+                <div class="form-group">
+                    <label>نوع الفقرة:</label>
+                    <select id="sideTopicType" class="form-control" onchange="updateCard()">
+                        <option value="السيرة النبوية">السيرة النبوية</option>
+                        <option value="فقه">فقه</option>
+                        <option value="تفسير">تفسير</option>
+                        <option value="حديث">حديث</option>
+                        <option value="عقيدة">عقيدة</option>
+                        <option value="تربويات">تربويات</option>
+                        <option value="أدبيات">أدبيات</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>محتوى الفقرة الجانبية:</label>
+                    <input type="text" id="sideTopicContent" class="form-control" placeholder="محتوى الفقرة..." oninput="updateCard()">
+                </div>
+            </div>
+
+            <span class="section-badge">🎯 المطلوب للحلقة القادمة</span>
+
+            <div class="form-group">
+                <label>الحفظ الجديد القادم:</label>
+                <input type="text" id="nextMemorizeInput" class="form-control" placeholder="المطلوب حفظه قادماً..." oninput="updateCard()">
+            </div>
+
+            <div class="form-group">
+                <label>المراجعة القادمة:</label>
+                <input type="text" id="nextReviewInput" class="form-control" placeholder="المطلوب مراجعته قادماً..." oninput="updateCard()">
+            </div>
+
+            <span class="section-badge">🕌 المتابعة والملاحظات</span>
+
+            <div class="form-group">
+                <label>متابعة الصلوات الخمس:</label>
+                <div class="prayer-inputs">
+                    <div class="prayer-item"><label>الفجر</label><select id="p_fajr" onchange="updateCard()"><option value="✅">✅</option><option value="❌">❌</option></select></div>
+                    <div class="prayer-item"><label>الظهر</label><select id="p_dhuhr" onchange="updateCard()"><option value="✅">✅</option><option value="❌">❌</option></select></div>
+                    <div class="prayer-item"><label>العصر</label><select id="p_asr" onchange="updateCard()"><option value="✅">✅</option><option value="❌">❌</option></select></div>
+                    <div class="prayer-item"><label>المغرب</label><select id="p_maghrib" onchange="updateCard()"><option value="✅">✅</option><option value="❌">❌</option></select></div>
+                    <div class="prayer-item"><label>العشاء</label><select id="p_isha" onchange="updateCard()"><option value="✅">✅</option><option value="❌">❌</option></select></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>ملاحظات المعلم:</label>
+                <input type="text" id="notesInput" class="form-control" placeholder="أدخل ملاحظات المعلم..." oninput="updateCard()">
+            </div>
+        </div>
+
+        <div id="noorForm" class="hidden">
+            <span class="section-badge">👤 الأساسية (نور البيان)</span>
+            
+            <div class="form-group">
+                <label>اسم الطالب:</label>
+                <input type="text" id="noorStudentNameInput" class="form-control" placeholder="أدخل اسم الطالب..." oninput="updateNoorCard()">
+            </div>
+
+            <div class="form-group">
+                <label>اسم المعلم:</label>
+                <input type="text" id="noorTeacherNameInput" class="form-control" placeholder="أدخل اسم المعلم..." oninput="updateNoorCard()">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <div class="form-group">
+                    <label>التاريخ:</label>
+                    <input type="date" id="noorDateInput" class="form-control" onchange="updateNoorCard()">
+                </div>
+
+                <div class="form-group">
+                    <label>رقم الحلقة:</label>
+                    <select id="noorSessionNumInput" class="form-control" onchange="updateNoorCard()">
+                        <option value="الحلقة 1">الحلقة 1</option>
+                        <option value="الحلقة 2">الحلقة 2</option>
+                        <option value="الحلقة 3">الحلقة 3</option>
+                        <option value="الحلقة 4">الحلقة 4</option>
+                        <option value="الحلقة 5">الحلقة 5</option>
+                        <option value="الحلقة 6">الحلقة 6</option>
+                        <option value="الحلقة 7">الحلقة 7</option>
+                        <option value="الحلقة 8">الحلقة 8</option>
+                        <option value="الحلقة 9">الحلقة 9</option>
+                        <option value="الحلقة 10">الحلقة 10</option>
+                        <option value="الحلقة 11">الحلقة 11</option>
+                        <option value="الحلقة 12">الحلقة 12</option>
+                        <option value="الحلقة 13">الحلقة 13</option>
+                        <option value="الحلقة 14">الحلقة 14</option>
+                        <option value="الحلقة 15">الحلقة 15</option>
+                        <option value="الحلقة 16">الحلقة 16</option>
+                        <option value="الحلقة 17">الحلقة 17</option>
+                        <option value="الحلقة 18">الحلقة 18</option>
+                        <option value="الحلقة 19">الحلقة 19</option>
+                        <option value="الحلقة 20">الحلقة 20</option>
+                        <option value="الحلقة 21">الحلقة 21</option>
+                        <option value="الحلقة 22">الحلقة 22</option>
+                        <option value="الحلقة 23">الحلقة 23</option>
+                        <option value="الحلقة 24">الحلقة 24</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>مدة الحلقة:</label>
+                <select id="noorDurationInput" class="form-control" onchange="updateNoorCard()">
+                    <option value="30 دقيقة">30 دقيقة</option>
+                    <option value="45 دقيقة" selected>45 دقيقة</option>
+                    <option value="60 دقيقة">60 دقيقة</option>
+                </select>
+            </div>
+
+            <span class="section-badge">📖 إنجاز نور البيان اليومي</span>
+
+            <div class="form-group">
+                <label>الدرس الجديد (كتاب نور البيان):</label>
+                <input type="text" id="noorLessonInput" class="form-control" placeholder="أدخل الدرس الجديد..." oninput="updateNoorCard()">
+            </div>
+
+            <div class="form-group">
+                <label>المراجعة (نور البيان):</label>
+                <input type="text" id="noorReviewInput" class="form-control" placeholder="أدخل المراجعة..." oninput="updateNoorCard()">
+            </div>
+
+            <div class="form-group">
+                <label>التقييم العام للحلقة:</label>
+                <select id="noorRatingInput" class="form-control" onchange="updateNoorCard()">
+                    <option value="ممتاز ⭐⭐⭐">ممتاز ⭐⭐⭐</option>
+                    <option value="جيد جداً ⭐⭐">جيد جداً ⭐⭐</option>
+                    <option value="جيد ⭐">جيد ⭐</option>
+                    <option value="يحتاج إلى مراجعة وتطوير ⚠️">يحتاج إلى مراجعة وتطوير ⚠️</option>
+                </select>
+            </div>
+
+            <span class="section-badge">🎯 المطلوب للحلقة القادمة</span>
+
+            <div class="form-group">
+                <label>الدرس القادم:</label>
+                <input type="text" id="noorNextLessonInput" class="form-control" placeholder="المطلوب دراسته قادماً..." oninput="updateNoorCard()">
+            </div>
+
+            <div class="form-group">
+                <label>المراجعة القادمة:</label>
+                <input type="text" id="noorNextReviewInput" class="form-control" placeholder="المطلوب مراجعته قادماً..." oninput="updateNoorCard()">
+            </div>
+
+            <span class="section-badge">🕌 المتابعة والملاحظات</span>
+
+            <div class="form-group">
+                <label>متابعة الصلوات الخمس:</label>
+                <div class="prayer-inputs">
+                    <div class="prayer-item"><label>الفجر</label><select id="np_fajr" onchange="updateNoorCard()"><option value="✅">✅</option><option value="❌">❌</option></select></div>
+                    <div class="prayer-item"><label>الظهر</label><select id="np_dhuhr" onchange="updateNoorCard()"><option value="✅">✅</option><option value="❌">❌</option></select></div>
+                    <div class="prayer-item"><label>العصر</label><select id="np_asr" onchange="updateNoorCard()"><option value="✅">✅</option><option value="❌">❌</option></select></div>
+                    <div class="prayer-item"><label>المغرب</label><select id="np_maghrib" onchange="updateNoorCard()"><option value="✅">✅</option><option value="❌">❌</option></select></div>
+                    <div class="prayer-item"><label>العشاء</label><select id="np_isha" onchange="updateNoorCard()"><option value="✅">✅</option><option value="❌">❌</option></select></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>ملاحظات المعلم:</label>
+                <input type="text" id="noorNotesInput" class="form-control" placeholder="أدخل ملاحظات المعلم..." oninput="updateNoorCard()">
+            </div>
+        </div>
+
+        <div id="monthlyForm" class="hidden">
+            <span class="section-badge">👤 بيانات التقرير الشهري</span>
+            
+            <div class="form-group">
+                <label>اسم الطالب:</label>
+                <input type="text" id="mStudentNameInput" class="form-control" placeholder="أدخل اسم الطالب..." oninput="updateMonthlyCard()">
+            </div>
+
+            <div class="form-group">
+                <label>اسم المعلم:</label>
+                <input type="text" id="mTeacherNameInput" class="form-control" placeholder="أدخل اسم المعلم..." oninput="updateMonthlyCard()">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <div class="form-group">
+                    <label>عن شهر / سنة:</label>
+                    <input type="month" id="mMonthInput" class="form-control" onchange="updateMonthlyCard()">
+                </div>
+                <div class="form-group">
+                    <label>عدد الحلقات الحاضرة:</label>
+                    <input type="number" id="mAttendedInput" class="form-control" placeholder="مثال: 12" oninput="updateMonthlyCard()">
+                </div>
+            </div>
+
+            <span class="section-badge">📊 إنجازات الشهر</span>
+
+            <div class="form-group">
+                <label>إجمالي الحفظ الجديد خلال الشهر:</label>
+                <input type="text" id="mMemorizeInput" class="form-control" placeholder="مثال: من سورة النبأ إلى سورة الانفطار" oninput="updateMonthlyCard()">
+            </div>
+
+            <div class="form-group">
+                <label>إجمالي المراجعة خلال الشهر:</label>
+                <input type="text" id="mReviewInput" class="form-control" placeholder="مثال: جزء عمّ كاملاً" oninput="updateMonthlyCard()">
+            </div>
+
+            <div class="form-group">
+                <label>ما تم دراسته في التجويد والجانب التربوي:</label>
+                <input type="text" id="mTajweedInput" class="form-control" placeholder="مثال: أحكام النون الساكنة + غزوة بدر" oninput="updateMonthlyCard()">
+            </div>
+
+            <span class="section-badge">🌟 التقييمات والسلوك</span>
+
+            <div class="form-group">
+                <label>الالتزام بالصلوات الخمس:</label>
+                <select id="mPrayerRating" class="form-control" onchange="updateMonthlyCard()">
+                    <option value="ممتاز وملتزم تماماً 🌟">ممتاز وملتزم تماماً 🌟</option>
+                    <option value="جيد جداً 👍">جيد جداً 👍</option>
+                    <option value="يحتاج للتشجيع والمتابعة ⚠️">يحتاج للتشجيع والمتابعة ⚠️</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>التقييم العام لإنجاز الشهر:</label>
+                <select id="mOverallRating" class="form-control" onchange="updateMonthlyCard()">
+                    <option value="ممتاز مرتفع 🏆">ممتاز مرتفع 🏆</option>
+                    <option value="ممتاز ⭐⭐⭐">ممتاز ⭐⭐⭐</option>
+                    <option value="جيد جداً ⭐⭐">جيد جداً ⭐⭐</option>
+                    <option value="جيد ⭐">جيد ⭐</option>
+                    <option value="يحتاج لتكثيف الجهود ⚠️">يحتاج لتكثيف الجهود ⚠️</option>
+                </select>
+            </div>
+
+            <span class="section-badge">🎯 خطة الشهر القادم وملاحظات</span>
+
+            <div class="form-group">
+                <label>خطة الشهر القادم:</label>
+                <input type="text" id="mNextPlanInput" class="form-control" placeholder="أهداف الشهر الجديد..." oninput="updateMonthlyCard()">
+            </div>
+
+            <div class="form-group">
+                <label>توصيات وملاحظات المعلم:</label>
+                <input type="text" id="mNotesInput" class="form-control" placeholder="توصيات لولي الأمر..." oninput="updateMonthlyCard()">
+            </div>
+        </div>
+
+        <div id="absenceForm" class="hidden">
+            <span class="section-badge">⚠️ تسجيل غياب بدون عذر</span>
+            
+            <div class="form-group">
+                <label>اسم الطالب:</label>
+                <input type="text" id="aStudentNameInput" class="form-control" placeholder="اسم الطالب..." oninput="updateAbsenceCard()">
+            </div>
+
+            <div class="form-group">
+                <label>اسم المعلم:</label>
+                <input type="text" id="aTeacherNameInput" class="form-control" placeholder="اسم المعلم..." oninput="updateAbsenceCard()">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <div class="form-group">
+                    <label>رقم الحلقة:</label>
+                    <select id="aSessionNumInput" class="form-control" onchange="updateAbsenceCard()">
+                        <option value="الحلقة 1">الحلقة 1</option>
+                        <option value="الحلقة 2">الحلقة 2</option>
+                        <option value="الحلقة 3">الحلقة 3</option>
+                        <option value="الحلقة 4">الحلقة 4</option>
+                        <option value="الحلقة 5">الحلقة 5</option>
+                        <option value="الحلقة 6">الحلقة 6</option>
+                        <option value="الحلقة 7">الحلقة 7</option>
+                        <option value="الحلقة 8">الحلقة 8</option>
+                        <option value="الحلقة 9">الحلقة 9</option>
+                        <option value="الحلقة 10">الحلقة 10</option>
+                        <option value="الحلقة 11">الحلقة 11</option>
+                        <option value="الحلقة 12">الحلقة 12</option>
+                        <option value="الحلقة 13">الحلقة 13</option>
+                        <option value="الحلقة 14">الحلقة 14</option>
+                        <option value="الحلقة 15">الحلقة 15</option>
+                        <option value="الحلقة 16">الحلقة 16</option>
+                        <option value="الحلقة 17">الحلقة 17</option>
+                        <option value="الحلقة 18">الحلقة 18</option>
+                        <option value="الحلقة 19">الحلقة 19</option>
+                        <option value="الحلقة 20">الحلقة 20</option>
+                        <option value="الحلقة 21">الحلقة 21</option>
+                        <option value="الحلقة 22">الحلقة 22</option>
+                        <option value="الحلقة 23">الحلقة 23</option>
+                        <option value="الحلقة 24">الحلقة 24</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>التاريخ:</label>
+                    <input type="date" id="aDateInput" class="form-control" onchange="updateAbsenceCard()">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>مدّة الحلقة:</label>
+                <select id="aDurationInput" class="form-control" onchange="updateAbsenceCard()">
+                    <option value="30 دقيقة">30 دقيقة</option>
+                    <option value="45 دقيقة" selected>45 دقيقة</option>
+                    <option value="60 دقيقة">60 دقيقة</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="excusedForm" class="hidden">
+            <span class="section-badge">🟢 تسجيل غياب بعذر وتعويض</span>
+            
+            <div class="form-group">
+                <label>اسم الطالب:</label>
+                <input type="text" id="eStudentNameInput" class="form-control" placeholder="اسم الطالب..." oninput="updateExcusedCard()">
+            </div>
+
+            <div class="form-group">
+                <label>اسم المعلم:</label>
+                <input type="text" id="eTeacherNameInput" class="form-control" placeholder="اسم المعلم..." oninput="updateExcusedCard()">
+            </div>
+
+            <div class="form-group">
+                <label>تاريخ الغياب الأصلي:</label>
+                <input type="date" id="eDateInput" class="form-control" onchange="updateExcusedCard()">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <div class="form-group">
+                    <label>تاريخ الحلقة المعوضة:</label>
+                    <input type="date" id="eMakeupDateInput" class="form-control" onchange="updateExcusedCard()">
+                </div>
+                <div class="form-group">
+                    <label>وقت الحلقة المعوضة:</label>
+                    <input type="time" id="eMakeupTimeInput" class="form-control" onchange="updateExcusedCard()">
+                </div>
+            </div>
+        </div>
+
+        <div id="postponeForm" class="hidden">
+            <span class="section-badge">⏳ تسجيل تأجيل الحلقة</span>
+            
+            <div class="form-group">
+                <label>اسم الطالب:</label>
+                <input type="text" id="pStudentNameInput" class="form-control" placeholder="اسم الطالب..." oninput="updatePostponeCard()">
+            </div>
+
+            <div class="form-group">
+                <label>اسم المعلم:</label>
+                <input type="text" id="pTeacherNameInput" class="form-control" placeholder="اسم المعلم..." oninput="updatePostponeCard()">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <div class="form-group">
+                    <label>تاريخ الموعد الجديد:</label>
+                    <input type="date" id="pDateInput" class="form-control" onchange="updatePostponeCard()">
+                </div>
+                <div class="form-group">
+                    <label>الساعة الجديدة:</label>
+                    <input type="time" id="pTimeInput" class="form-control" onchange="updatePostponeCard()">
+                </div>
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn btn-whatsapp" onclick="shareToWhatsApp()">💬 مشاركة التقرير عبر واتساب</button>
+            <button class="btn btn-primary" onclick="downloadCard()">📸 تحميل التقرير كصورة (PNG)</button>
+        </div>
+    </div>
+
+    <div class="preview-area">
+        
+        <div id="reportCard" class="report-card">
+            <div class="card-inner-border">
+                <div class="header-section">
+                    <div class="card-logo-wrapper">
+                        <img src="./logo.png" alt="لوجو أكاديمية تبيان" class="card-logo-img">
+                    </div>
+                    <div class="academy-name">أكاديمية تبيان للقرآن الكريم</div>
+                    <div class="report-title">📜 تقرير متابعة الحلقة اليومية</div>
+                </div>
+
+                <div class="info-grid">
+                    <div>👤 <strong>الطالب:</strong> <span id="cardStudentName">----------------</span></div>
+                    <div>👨‍🏫 <strong>المعلم:</strong> <span id="cardTeacherName">----------------</span></div>
+                    <div>📅 <strong>التاريخ:</strong> <span id="cardDate">2026-09-11</span></div>
+                    <div>🔢 <strong>الحلقة:</strong> <span id="cardSession">الحلقة 1</span></div>
+                    <div style="grid-column: span 2;">⏱️ <strong>مدة الحلقة:</strong> <span id="cardDuration">45 دقيقة</span></div>
+                </div>
+
+                <div class="details-section">
+                    <div class="detail-row">
+                        <span class="detail-label">📖 الحفظ الجديد:</span>
+                        <span class="detail-value" id="cardNewMemorize">----------------</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">🔄 المراجعة:</span>
+                        <span class="detail-value" id="cardReview">----------------</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">🎙️ أحكام التجويد:</span>
+                        <span class="detail-value" id="cardTajweed">----------------</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">🌟 التقييم العام:</span>
+                        <span class="detail-value" id="cardRating">ممتاز ⭐⭐⭐</span>
+                    </div>
+                    <div class="detail-row" style="background: rgba(10, 79, 40, 0.03); padding: 4px; border-radius: 4px;">
+                        <span class="detail-label">📚 الفقرة الجانبية (<span id="cardSideType">السيرة النبوية</span>):</span>
+                        <span class="detail-value" id="cardSideContent">----------------</span>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <div class="box-title">🎯 المطلوب للحلقة القادمة</div>
+                    <div class="detail-row" style="border-bottom: 1px dashed rgba(212, 175, 55, 0.4);">
+                        <span class="detail-label">📖 الحفظ الجديد:</span>
+                        <span class="detail-value" id="cardNextMemorize">----------------</span>
+                    </div>
+                    <div class="detail-row" style="border-bottom: none;">
+                        <span class="detail-label">🔄 المراجعة:</span>
+                        <span class="detail-value" id="cardNextReview">----------------</span>
+                    </div>
+                </div>
+
+                <div class="prayer-section">
+                    <div class="prayer-title">🕌 متابعة أداء الصلوات الخمس</div>
+                    <div class="prayer-grid">
+                        <div class="prayer-box">الفجر<br><span id="cp_fajr">✅</span></div>
+                        <div class="prayer-box">الظهر<br><span id="cp_dhuhr">✅</span></div>
+                        <div class="prayer-box">العصر<br><span id="cp_asr">✅</span></div>
+                        <div class="prayer-box">المغرب<br><span id="cp_maghrib">✅</span></div>
+                        <div class="prayer-box">العشاء<br><span id="cp_isha">✅</span></div>
+                    </div>
+                </div>
+
+                <div class="notes-box">
+                    💡 <strong>ملاحظة المعلم:</strong>
+                    <div id="cardNotes">----------------</div>
+                </div>
+
+                <div class="footer-section">
+                    🌱 هنا يُزرع القرآن في القلوب قبل العقول 🌱
+                </div>
+            </div>
+        </div>
+
+        <div id="noorReportCard" class="report-card hidden">
+            <div class="card-inner-border">
+                <div class="header-section">
+                    <div class="card-logo-wrapper">
+                        <img src="./logo.png" alt="لوجو أكاديمية تبيان" class="card-logo-img">
+                    </div>
+                    <div class="academy-name">أكاديمية تبيان للقرآن الكريم</div>
+                    <div class="report-title" style="background: #0d9488; color: #fff;">📖 تقرير برنامج نور البيان</div>
+                </div>
+
+                <div class="info-grid">
+                    <div>👤 <strong>الطالب:</strong> <span id="noorCardStudentName">----------------</span></div>
+                    <div>👨‍🏫 <strong>المعلم:</strong> <span id="noorCardTeacherName">----------------</span></div>
+                    <div>📅 <strong>التاريخ:</strong> <span id="noorCardDate">2026-09-11</span></div>
+                    <div>🔢 <strong>الحلقة:</strong> <span id="noorCardSession">الحلقة 1</span></div>
+                    <div style="grid-column: span 2;">⏱️ <strong>مدة الحلقة:</strong> <span id="noorCardDuration">45 دقيقة</span></div>
+                </div>
+
+                <div class="details-section">
+                    <div class="detail-row">
+                        <span class="detail-label">📖 الدرس الجديد:</span>
+                        <span class="detail-value" id="noorCardLesson">----------------</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">🔄 المراجعة:</span>
+                        <span class="detail-value" id="noorCardReview">----------------</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">🌟 التقييم العام:</span>
+                        <span class="detail-value" id="noorCardRating">ممتاز ⭐⭐⭐</span>
+                    </div>
+                </div>
+
+                <div class="highlight-box" style="background: rgba(13, 148, 136, 0.08); border-color: #0d9488;">
+                    <div class="box-title" style="color: #0d9488;">🎯 المطلوب للحلقة القادمة</div>
+                    <div class="detail-row" style="border-bottom: 1px dashed rgba(13, 148, 136, 0.4);">
+                        <span class="detail-label">📖 الدرس القادم:</span>
+                        <span class="detail-value" id="noorCardNextLesson">----------------</span>
+                    </div>
+                    <div class="detail-row" style="border-bottom: none;">
+                        <span class="detail-label">🔄 المراجعة القادمة:</span>
+                        <span class="detail-value" id="noorCardNextReview">----------------</span>
+                    </div>
+                </div>
+
+                <div class="prayer-section">
+                    <div class="prayer-title">🕌 متابعة أداء الصلوات الخمس</div>
+                    <div class="prayer-grid">
+                        <div class="prayer-box">الفجر<br><span id="ncp_fajr">✅</span></div>
+                        <div class="prayer-box">الظهر<br><span id="ncp_dhuhr">✅</span></div>
+                        <div class="prayer-box">العصر<br><span id="ncp_asr">✅</span></div>
+                        <div class="prayer-box">المغرب<br><span id="ncp_maghrib">✅</span></div>
+                        <div class="prayer-box">العشاء<br><span id="ncp_isha">✅</span></div>
+                    </div>
+                </div>
+
+                <div class="notes-box">
+                    💡 <strong>ملاحظة المعلم:</strong>
+                    <div id="noorCardNotes">----------------</div>
+                </div>
+
+                <div class="footer-section">
+                    🌱 هنا يُزرع القرآن في القلوب قبل العقول 🌱
+                </div>
+            </div>
+        </div>
+
+        <div id="monthlyReportCard" class="report-card hidden">
+            <div class="card-inner-border">
+                <div class="header-section">
+                    <div class="card-logo-wrapper">
+                        <img src="./logo.png" alt="لوجو أكاديمية تبيان" class="card-logo-img">
+                    </div>
+                    <div class="academy-name">أكاديمية تبيان للقرآن الكريم</div>
+                    <div class="report-title" style="background: #d4af37; color: #051e10;">🏆 تقرير الإنجاز الشهري</div>
+                </div>
+
+                <div class="info-grid">
+                    <div>👤 <strong>الطالب:</strong> <span id="mCardStudentName">----------------</span></div>
+                    <div>👨‍🏫 <strong>المعلم:</strong> <span id="mCardTeacherName">----------------</span></div>
+                    <div>📅 <strong>عن شهر:</strong> <span id="mCardMonth">2026-09</span></div>
+                    <div>🏫 <strong>الحلقات الحاضرة:</strong> <span id="mCardAttended">--</span> حلقة</div>
+                </div>
+
+                <div class="details-section">
+                    <div class="detail-row">
+                        <span class="detail-label">📖 إجمالي الحفظ الشهري:</span>
+                        <span class="detail-value" id="mCardMemorize">----------------</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">🔄 إجمالي المراجعة الشهرية:</span>
+                        <span class="detail-value" id="mCardReview">----------------</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">🎙️ التجويد والجانب التربوي:</span>
+                        <span class="detail-value" id="mCardTajweed">----------------</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">🕌 أداء الصلوات والسلوك:</span>
+                        <span class="detail-value" id="mCardPrayer">ممتاز وملتزم تماماً 🌟</span>
+                    </div>
+                    <div class="detail-row" style="background: rgba(212, 175, 55, 0.12); padding: 6px; border-radius: 6px; border: 1px solid var(--accent-gold);">
+                        <span class="detail-label" style="color: #0a4f28;">🏆 التقييم الشهري العام:</span>
+                        <span class="detail-value" id="mCardOverall" style="font-weight: 800; font-size: 0.9rem;">ممتاز مرتفع 🏆</span>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <div class="box-title">🚀 خطة الشهر القادم</div>
+                    <div class="detail-row" style="border-bottom: none;">
+                        <span class="detail-value" id="mCardNextPlan">----------------</span>
+                    </div>
+                </div>
+
+                <div class="notes-box">
+                    💡 <strong>توصيات وملاحظات المعلم:</strong>
+                    <div id="mCardNotes">----------------</div>
+                </div>
+
+                <div class="footer-section">
+                    🌟 مبارك هذا الإنجاز، ونحو مزيد من الارتقاء بالقرآن 🌟
+                </div>
+            </div>
+        </div>
+
+        <div id="absenceReportCard" class="report-card hidden">
+            <div class="card-inner-border">
+                <div class="header-section">
+                    <div class="card-logo-wrapper">
+                        <img src="./logo.png" alt="لوجو أكاديمية تبيان" class="card-logo-img">
+                    </div>
+                    <div class="academy-name">أكاديمية تبيان للقرآن الكريم</div>
+                    <div class="report-title" style="background: #b91c1c; color: #fff;">📌 تقرير غياب بدون عذر 📌</div>
+                </div>
+
+                <div class="info-grid" style="grid-template-columns: 1fr;">
+                    <div class="detail-row" style="border-bottom: 1px dashed #e5e7eb;">👨‍💼 <strong>اسم المعلم:</strong> <span id="aCardTeacherName">----------------</span></div>
+                    <div class="detail-row" style="border-bottom: 1px dashed #e5e7eb;">👤 <strong>اسم الطالب:</strong> <span id="aCardStudentName">----------------</span></div>
+                    <div class="detail-row" style="border-bottom: 1px dashed #e5e7eb;">🔢 <strong>رقم الحلقة:</strong> <span id="aCardSession">الحلقة 1</span></div>
+                    <div class="detail-row" style="border-bottom: 1px dashed #e5e7eb;">🗓️ <strong>اليوم / التاريخ:</strong> <span id="aCardDate">2026-09-11</span></div>
+                    <div class="detail-row" style="border-bottom: none;">⏳ <strong>مدة الحلقة:</strong> <span id="aCardDuration">45 دقيقة</span></div>
+                </div>
+
+                <div style="text-align: center; margin: 15px 0; padding: 10px; background: rgba(185, 28, 28, 0.05); border: 1px dashed #b91c1c; border-radius: 8px; color: #b91c1c; font-weight: 700; font-size: 0.85rem;">
+                    ⚠️ تغيب الطالب عن حضور الحلقة في موعدها المذكور أعلاه بدون عذر مسبق.
+                </div>
+
+                <div class="footer-section">
+                    🌿 هنا يُزرع القرآن في القلوب قبل العقول 🌿
+                </div>
+            </div>
+        </div>
+
+        <div id="excusedReportCard" class="report-card hidden">
+            <div class="card-inner-border">
+                <div class="header-section">
+                    <div class="card-logo-wrapper">
+                        <img src="./logo.png" alt="لوجو أكاديمية تبيان" class="card-logo-img">
+                    </div>
+                    <div class="academy-name">أكاديمية تبيان للقرآن الكريم</div>
+                    <div class="report-title" style="background: #047857; color: #fff;">🟢 تقرير غياب بعذر وتعويض 🟢</div>
+                </div>
+
+                <div class="info-grid" style="grid-template-columns: 1fr;">
+                    <div class="detail-row" style="border-bottom: 1px dashed #e5e7eb;">👨‍💼 <strong>اسم المعلم:</strong> <span id="eCardTeacherName">----------------</span></div>
+                    <div class="detail-row" style="border-bottom: 1px dashed #e5e7eb;">👤 <strong>اسم الطالب:</strong> <span id="eCardStudentName">----------------</span></div>
+                    <div class="detail-row" style="border-bottom: none;">🗓️ <strong>تاريخ الغياب:</strong> <span id="eCardDate">2026-09-11</span></div>
+                </div>
+
+                <div style="text-align: center; margin: 15px 0; padding: 12px; background: rgba(4, 120, 87, 0.05); border: 1px dashed #047857; border-radius: 8px; color: #047857; font-weight: 700; font-size: 0.85rem; line-height: 1.6;">
+                    تم تسجيل الغياب بعذر، وتم الاتفاق على تعويض الحلقة لتكون بتاريخ <span id="eCardMakeupDate" style="color: #0a4f28; font-weight: 800;">----/--/--</span> الساعة <span id="eCardMakeupTime" style="color: #0a4f28; font-weight: 800;">--:--</span>.
+                </div>
+
+                <div class="footer-section">
+                    🌿 هنا يُزرع القرآن في القلوب قبل العقول 🌿
+                </div>
+            </div>
+        </div>
+
+        <div id="postponeReportCard" class="report-card hidden">
+            <div class="card-inner-border">
+                <div class="header-section">
+                    <div class="card-logo-wrapper">
+                        <img src="./logo.png" alt="لوجو أكاديمية تبيان" class="card-logo-img">
+                    </div>
+                    <div class="academy-name">أكاديمية تبيان للقرآن الكريم</div>
+                    <div class="report-title" style="background: #b45309; color: #fff;">⏳ تقرير تأجيل الحلقة ⏳</div>
+                </div>
+
+                <div class="info-grid" style="grid-template-columns: 1fr;">
+                    <div class="detail-row" style="border-bottom: 1px dashed #e5e7eb;">👨‍💼 <strong>اسم المعلم:</strong> <span id="pCardTeacherName">----------------</span></div>
+                    <div class="detail-row" style="border-bottom: none;">👤 <strong>اسم الطالب:</strong> <span id="pCardStudentName">----------------</span></div>
+                </div>
+
+                <div style="text-align: center; margin: 15px 0; padding: 12px; background: rgba(180, 83, 9, 0.05); border: 1px dashed #b45309; border-radius: 8px; color: #b45309; font-weight: 700; font-size: 0.88rem; line-height: 1.6;">
+                    تم تأجيل الحلقة لظروف ما، وتم تحديد الموعد الجديد للساعة <span id="pCardTime" style="color: #0a4f28; font-weight: 800;">--:--</span> بتاريخ <span id="pCardDate" style="color: #0a4f28; font-weight: 800;">----/--/--</span>.
+                </div>
+
+                <div class="footer-section">
+                    🌿 هنا يُزرع القرآن في القلوب قبل العقول 🌿
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbxGbPyXPEKb-kj7uaGotMEoP1CCbsph88aTitSvHflNHnmYYPn_h8M4qFhYOKsimIlI/exec";
+    let activeMode = 'daily';
+
+    // دالة تحويل تنسيق الوقت إلى نظام 12 ساعة مع (صباحاً / مساءً)
+    function format12Hour(timeString) {
+        if (!timeString) return '--:--';
+        let parts = timeString.split(':');
+        let hours = parseInt(parts[0], 10);
+        let minutes = parts[1] || '00';
+        
+        let period = hours >= 12 ? 'مساءً' : 'صباحاً';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // الساعة 12 بدلاً من 0
+        
+        let formattedHours = String(hours).padStart(2, '0');
+        return `${formattedHours}:${minutes} ${period}`;
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const todayStr = new Date().toISOString().split('T')[0];
+        document.getElementById('dateInput').value = todayStr;
+        document.getElementById('noorDateInput').value = todayStr;
+        document.getElementById('aDateInput').value = todayStr;
+        document.getElementById('eDateInput').value = todayStr;
+        document.getElementById('eMakeupDateInput').value = todayStr;
+        document.getElementById('eMakeupTimeInput').value = "16:00";
+        document.getElementById('pDateInput').value = todayStr;
+        document.getElementById('pTimeInput').value = "16:00";
+        
+        const now = new Date();
+        const monthStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+        document.getElementById('mMonthInput').value = monthStr;
+
+        // استقبال بيانات الطالب والمعلم تلقائياً من الصفحة الرئيسية
+        const savedSession = sessionStorage.getItem("currentSession");
+        if (savedSession) {
+            try {
+                const data = JSON.parse(savedSession);
+                
+                if (data.student) {
+                    document.getElementById('studentNameInput').value = data.student;
+                    document.getElementById('noorStudentNameInput').value = data.student;
+                    document.getElementById('mStudentNameInput').value = data.student;
+                    document.getElementById('aStudentNameInput').value = data.student;
+                    document.getElementById('eStudentNameInput').value = data.student;
+                    document.getElementById('pStudentNameInput').value = data.student;
+                }
+                if (data.teacher) {
+                    document.getElementById('teacherNameInput').value = data.teacher;
+                    document.getElementById('noorTeacherNameInput').value = data.teacher;
+                    document.getElementById('mTeacherNameInput').value = data.teacher;
+                    document.getElementById('aTeacherNameInput').value = data.teacher;
+                    document.getElementById('eTeacherNameInput').value = data.teacher;
+                    document.getElementById('pTeacherNameInput').value = data.teacher;
+                }
+                if (data.sessionNum && data.sessionNum !== "-") {
+                    document.getElementById('sessionNumInput').value = data.sessionNum;
+                    document.getElementById('noorSessionNumInput').value = data.sessionNum;
+                    document.getElementById('aSessionNumInput').value = data.sessionNum;
+                }
+            } catch (e) {
+                console.error("خطأ في قراءة بيانات الجلسة:", e);
+            }
+        }
+
+        updateCard();
+        updateNoorCard();
+        updateMonthlyCard();
+        updateAbsenceCard();
+        updateExcusedCard();
+        updatePostponeCard();
+    });
+
+    function switchReportType(type) {
+        activeMode = type;
+        
+        // إخفاء جميع النماذج والبطاقات
+        ['dailyForm', 'noorForm', 'monthlyForm', 'absenceForm', 'excusedForm', 'postponeForm'].forEach(id => {
+            const el = document.getElementById(id);
+            if(el) el.classList.add('hidden');
+        });
+        ['reportCard', 'noorReportCard', 'monthlyReportCard', 'absenceReportCard', 'excusedReportCard', 'postponeReportCard'].forEach(id => {
+            const el = document.getElementById(id);
+            if(el) el.classList.add('hidden');
+        });
+        ['tabDailyBtn', 'tabNoorBtn', 'tabMonthlyBtn', 'tabAbsenceBtn', 'tabExcusedBtn', 'tabPostponeBtn'].forEach(id => {
+            const el = document.getElementById(id);
+            if(el) el.classList.remove('active');
+        });
+
+        // إظهار النموذج والبطاقة المطلوبة بناءً على التبويب المُختار
+        if (type === 'daily') {
+            document.getElementById('tabDailyBtn').classList.add('active');
+            document.getElementById('dailyForm').classList.remove('hidden');
+            document.getElementById('reportCard').classList.remove('hidden');
+        } else if (type === 'noor') {
+            document.getElementById('tabNoorBtn').classList.add('active');
+            document.getElementById('noorForm').classList.remove('hidden');
+            document.getElementById('noorReportCard').classList.remove('hidden');
+        } else if (type === 'monthly') {
+            document.getElementById('tabMonthlyBtn').classList.add('active');
+            document.getElementById('monthlyForm').classList.remove('hidden');
+            document.getElementById('monthlyReportCard').classList.remove('hidden');
+        } else if (type === 'absence') {
+            document.getElementById('tabAbsenceBtn').classList.add('active');
+            document.getElementById('absenceForm').classList.remove('hidden');
+            document.getElementById('absenceReportCard').classList.remove('hidden');
+        } else if (type === 'excused') {
+            document.getElementById('tabExcusedBtn').classList.add('active');
+            document.getElementById('excusedForm').classList.remove('hidden');
+            document.getElementById('excusedReportCard').classList.remove('hidden');
+        } else if (type === 'postpone') {
+            document.getElementById('tabPostponeBtn').classList.add('active');
+            document.getElementById('postponeForm').classList.remove('hidden');
+            document.getElementById('postponeReportCard').classList.remove('hidden');
+        }
+    }
+
+    function updateCard() {
+        const studentName = document.getElementById('studentNameInput').value;
+        document.getElementById('cardStudentName').innerText = studentName.trim() !== "" ? studentName : "----------------";
+        
+        const teacherName = document.getElementById('teacherNameInput').value;
+        document.getElementById('cardTeacherName').innerText = teacherName.trim() !== "" ? teacherName : "----------------";
+
+        document.getElementById('cardDate').innerText = document.getElementById('dateInput').value;
+        document.getElementById('cardSession').innerText = document.getElementById('sessionNumInput').value || "الحلقة 1";
+        document.getElementById('cardDuration').innerText = document.getElementById('durationInput').value;
+        
+        const memorize = document.getElementById('newMemorizeInput').value;
+        document.getElementById('cardNewMemorize').innerText = memorize.trim() !== "" ? memorize : "----------------";
+
+        const review = document.getElementById('reviewInput').value;
+        document.getElementById('cardReview').innerText = review.trim() !== "" ? review : "----------------";
+
+        const tajweed = document.getElementById('tajweedInput').value;
+        document.getElementById('cardTajweed').innerText = tajweed.trim() !== "" ? tajweed : "----------------";
+
+        document.getElementById('cardRating').innerText = document.getElementById('ratingInput').value;
+
+        document.getElementById('cardSideType').innerText = document.getElementById('sideTopicType').value;
+        const sideContent = document.getElementById('sideTopicContent').value;
+        document.getElementById('cardSideContent').innerText = sideContent.trim() !== "" ? sideContent : "----------------";
+
+        const nextMemorize = document.getElementById('nextMemorizeInput').value;
+        document.getElementById('cardNextMemorize').innerText = nextMemorize.trim() !== "" ? nextMemorize : "----------------";
+
+        const nextReview = document.getElementById('nextReviewInput').value;
+        document.getElementById('cardNextReview').innerText = nextReview.trim() !== "" ? nextReview : "----------------";
+
+        document.getElementById('cp_fajr').innerText = document.getElementById('p_fajr').value;
+        document.getElementById('cp_dhuhr').innerText = document.getElementById('p_dhuhr').value;
+        document.getElementById('cp_asr').innerText = document.getElementById('p_asr').value;
+        document.getElementById('cp_maghrib').innerText = document.getElementById('p_maghrib').value;
+        document.getElementById('cp_isha').innerText = document.getElementById('p_isha').value;
+
+        const notes = document.getElementById('notesInput').value;
+        document.getElementById('cardNotes').innerText = notes.trim() !== "" ? notes : "----------------";
+    }
+
+    function updateNoorCard() {
+        const studentName = document.getElementById('noorStudentNameInput').value;
+        document.getElementById('noorCardStudentName').innerText = studentName.trim() !== "" ? studentName : "----------------";
+        
+        const teacherName = document.getElementById('noorTeacherNameInput').value;
+        document.getElementById('noorCardTeacherName').innerText = teacherName.trim() !== "" ? teacherName : "----------------";
+
+        document.getElementById('noorCardDate').innerText = document.getElementById('noorDateInput').value;
+        document.getElementById('noorCardSession').innerText = document.getElementById('noorSessionNumInput').value || "الحلقة 1";
+        document.getElementById('noorCardDuration').innerText = document.getElementById('noorDurationInput').value;
+        
+        const lesson = document.getElementById('noorLessonInput').value;
+        document.getElementById('noorCardLesson').innerText = lesson.trim() !== "" ? lesson : "----------------";
+
+        const review = document.getElementById('noorReviewInput').value;
+        document.getElementById('noorCardReview').innerText = review.trim() !== "" ? review : "----------------";
+
+        document.getElementById('noorCardRating').innerText = document.getElementById('noorRatingInput').value;
+
+        const nextLesson = document.getElementById('noorNextLessonInput').value;
+        document.getElementById('noorCardNextLesson').innerText = nextLesson.trim() !== "" ? nextLesson : "----------------";
+
+        const nextReview = document.getElementById('noorNextReviewInput').value;
+        document.getElementById('noorCardNextReview').innerText = nextReview.trim() !== "" ? nextReview : "----------------";
+
+        document.getElementById('ncp_fajr').innerText = document.getElementById('np_fajr').value;
+        document.getElementById('ncp_dhuhr').innerText = document.getElementById('np_dhuhr').value;
+        document.getElementById('ncp_asr').innerText = document.getElementById('np_asr').value;
+        document.getElementById('ncp_maghrib').innerText = document.getElementById('np_maghrib').value;
+        document.getElementById('ncp_isha').innerText = document.getElementById('np_isha').value;
+
+        const notes = document.getElementById('noorNotesInput').value;
+        document.getElementById('noorCardNotes').innerText = notes.trim() !== "" ? notes : "----------------";
+    }
+
+    function updateMonthlyCard() {
+        const sName = document.getElementById('mStudentNameInput').value;
+        document.getElementById('mCardStudentName').innerText = sName.trim() !== "" ? sName : "----------------";
+
+        const tName = document.getElementById('mTeacherNameInput').value;
+        document.getElementById('mCardTeacherName').innerText = tName.trim() !== "" ? tName : "----------------";
+
+        document.getElementById('mCardMonth').innerText = document.getElementById('mMonthInput').value;
+
+        const attended = document.getElementById('mAttendedInput').value;
+        document.getElementById('mCardAttended').innerText = attended.trim() !== "" ? attended : "--";
+
+        const mem = document.getElementById('mMemorizeInput').value;
+        document.getElementById('mCardMemorize').innerText = mem.trim() !== "" ? mem : "----------------";
+
+        const rev = document.getElementById('mReviewInput').value;
+        document.getElementById('mCardReview').innerText = rev.trim() !== "" ? rev : "----------------";
+
+        const taj = document.getElementById('mTajweedInput').value;
+        document.getElementById('mCardTajweed').innerText = taj.trim() !== "" ? taj : "----------------";
+
+        document.getElementById('mCardPrayer').innerText = document.getElementById('mPrayerRating').value;
+        document.getElementById('mCardOverall').innerText = document.getElementById('mOverallRating').value;
+
+        const plan = document.getElementById('mNextPlanInput').value;
+        document.getElementById('mCardNextPlan').innerText = plan.trim() !== "" ? plan : "----------------";
+
+        const notes = document.getElementById('mNotesInput').value;
+        document.getElementById('mCardNotes').innerText = notes.trim() !== "" ? notes : "----------------";
+    }
+
+    function updateAbsenceCard() {
+        const sName = document.getElementById('aStudentNameInput').value;
+        document.getElementById('aCardStudentName').innerText = sName.trim() !== "" ? sName : "----------------";
+
+        const tName = document.getElementById('aTeacherNameInput').value;
+        document.getElementById('aCardTeacherName').innerText = tName.trim() !== "" ? tName : "----------------";
+
+        document.getElementById('aCardSession').innerText = document.getElementById('aSessionNumInput').value || "الحلقة 1";
+        document.getElementById('aCardDate').innerText = document.getElementById('aDateInput').value;
+        document.getElementById('aCardDuration').innerText = document.getElementById('aDurationInput').value;
+    }
+
+    function updateExcusedCard() {
+        const sName = document.getElementById('eStudentNameInput').value;
+        document.getElementById('eCardStudentName').innerText = sName.trim() !== "" ? sName : "----------------";
+
+        const tName = document.getElementById('eTeacherNameInput').value;
+        document.getElementById('eCardTeacherName').innerText = tName.trim() !== "" ? tName : "----------------";
+
+        document.getElementById('eCardDate').innerText = document.getElementById('eDateInput').value;
+        document.getElementById('eCardMakeupDate').innerText = document.getElementById('eMakeupDateInput').value;
+        
+        const rawTime = document.getElementById('eMakeupTimeInput').value;
+        document.getElementById('eCardMakeupTime').innerText = format12Hour(rawTime);
+    }
+
+    function updatePostponeCard() {
+        const sName = document.getElementById('pStudentNameInput').value;
+        document.getElementById('pCardStudentName').innerText = sName.trim() !== "" ? sName : "----------------";
+
+        const tName = document.getElementById('pTeacherNameInput').value;
+        document.getElementById('pCardTeacherName').innerText = tName.trim() !== "" ? tName : "----------------";
+
+        document.getElementById('pCardDate').innerText = document.getElementById('pDateInput').value;
+        
+        const rawTime = document.getElementById('pTimeInput').value;
+        document.getElementById('pCardTime').innerText = format12Hour(rawTime);
+    }
+
+    function getActiveCard() {
+        if (activeMode === 'daily') return document.getElementById('reportCard');
+        if (activeMode === 'noor') return document.getElementById('noorReportCard');
+        if (activeMode === 'monthly') return document.getElementById('monthlyReportCard');
+        if (activeMode === 'absence') return document.getElementById('absenceReportCard');
+        if (activeMode === 'excused') return document.getElementById('excusedReportCard');
+        return document.getElementById('postponeReportCard');
+    }
+
+    function getStudentName() {
+        if (activeMode === 'daily') return document.getElementById('studentNameInput').value || "طالب";
+        if (activeMode === 'noor') return document.getElementById('noorStudentNameInput').value || "طالب";
+        if (activeMode === 'monthly') return document.getElementById('mStudentNameInput').value || "طالب";
+        if (activeMode === 'absence') return document.getElementById('aStudentNameInput').value || "طالب";
+        if (activeMode === 'excused') return document.getElementById('eStudentNameInput').value || "طالب";
+        return document.getElementById('pStudentNameInput').value || "طالب";
+    }
+
+    async function sendReportToSheet() {
+        const card = getActiveCard();
+        try {
+            const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: null });
+            const imageData = canvas.toDataURL('image/png');
+
+            let tName = "", sName = "", sNum = "", rType = "", stVal = "";
+            if (activeMode === 'daily') {
+                tName = document.getElementById('teacherNameInput').value;
+                sName = document.getElementById('studentNameInput').value;
+                sNum = document.getElementById('sessionNumInput').value;
+                rType = "يومي";
+                stVal = document.getElementById('ratingInput').value;
+            } else if (activeMode === 'noor') {
+                tName = document.getElementById('noorTeacherNameInput').value;
+                sName = document.getElementById('noorStudentNameInput').value;
+                sNum = document.getElementById('noorSessionNumInput').value;
+                rType = "نور البيان وبرامج أخرى";
+                stVal = document.getElementById('noorRatingInput').value;
+            } else if (activeMode === 'monthly') {
+                tName = document.getElementById('mTeacherNameInput').value;
+                sName = document.getElementById('mStudentNameInput').value;
+                sNum = "شهري";
+                rType = "شهري";
+                stVal = document.getElementById('mOverallRating').value;
+            } else if (activeMode === 'absence') {
+                tName = document.getElementById('aTeacherNameInput').value;
+                sName = document.getElementById('aStudentNameInput').value;
+                sNum = document.getElementById('aSessionNumInput').value;
+                rType = "غياب بدون عذر";
+                stVal = "غائب بدون عذر";
+            } else if (activeMode === 'excused') {
+                tName = document.getElementById('eTeacherNameInput').value;
+                sName = document.getElementById('eStudentNameInput').value;
+                sNum = "-";
+                rType = "غياب بعذر وتعويض";
+                stVal = "غياب بعذر وتم تحديد موعد التعويض";
+            } else {
+                tName = document.getElementById('pTeacherNameInput').value;
+                sName = document.getElementById('pStudentNameInput').value;
+                sNum = "-";
+                rType = "تأجيل";
+                stVal = "تم التأجيل";
+            }
+
+            const payload = {
+                teacherName: tName,
+                studentName: sName,
+                sessionNum: sNum,
+                reportType: rType,
+                status: stVal,
+                imageData: imageData
+            };
+
+            await fetch(API_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+        } catch (err) {
+            console.error("خطأ في إرسال التقرير للشيت:", err);
+        }
+    }
+
+    function downloadCard() {
+        sendReportToSheet();
+        const card = getActiveCard();
+        const name = getStudentName();
+        let typeText = "تقرير";
+        if (activeMode === 'daily') typeText = "تقرير_يومي";
+        else if (activeMode === 'noor') typeText = "تقرير_نور_البيان وبرامج أخرى";
+        else if (activeMode === 'monthly') typeText = "تقرير_شهري";
+        else if (activeMode === 'absence') typeText = "تقرير_غياب_بدون_عذر";
+        else if (activeMode === 'excused') typeText = "تقرير_غياب_بعذر_وتعويض";
+        else if (activeMode === 'postpone') typeText = "تقرير_تأجيل";
+        
+        html2canvas(card, { scale: 3, useCORS: true, backgroundColor: null }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = `${typeText}_${name}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+    }
+
+    async function shareToWhatsApp() {
+        sendReportToSheet();
+        const card = getActiveCard();
+        const name = getStudentName();
+        let typeText = "تقرير متابعة";
+        if (activeMode === 'daily') typeText = "تقرير متابعة يومي";
+        else if (activeMode === 'noor') typeText = "تقرير برنامج نور البيان وبرامج أخرى";
+        else if (activeMode === 'monthly') typeText = "تقرير الإنجاز الشهري";
+        else if (activeMode === 'absence') typeText = "تقرير غياب بدون عذر";
+        else if (activeMode === 'excused') typeText = "تقرير غياب بعذر وتعويض";
+        else if (activeMode === 'postpone') typeText = "تقرير تأجيل الحلقة";
+
+        try {
+            const canvas = await html2canvas(card, { scale: 3, useCORS: true, backgroundColor: null });
+            canvas.toBlob(async (blob) => {
+                const file = new File([blob], `${typeText}_${name}.png`, { type: 'image/png' });
+
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    await navigator.share({
+                        files: [file],
+                        title: `${typeText} - ${name}`,
+                        text: `📌 ${typeText} للطالب (${name}) - أكاديمية تبيان`
+                    });
+                } else {
+                    downloadCard();
+                    setTimeout(() => {
+                        window.open(`https://web.whatsapp.com/`, '_blank');
+                    }, 1000);
+                }
+            }, 'image/png');
+        } catch (error) {
+            console.error('حدث خطأ أثناء المشاركة:', error);
+            downloadCard();
+        }
+    }
+</script>
+<script src="nw.js"></script>
+</body>
+</html>
