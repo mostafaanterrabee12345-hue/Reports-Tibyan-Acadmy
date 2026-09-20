@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نظام التقارير الذكي - أكاديمية تبيان</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Cairo', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      direction: rtl;
+    }
+    .portal-card {
+      background: rgba(255, 255, 255, 0.98);
+      border-radius: 20px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      max-width: 600px;
+      padding: 35px 30px;
+      text-align: center;
+      border: 2px solid #c5a059;
+      position: relative;
+      overflow: hidden;
+    }
+    .portal-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 8px;
+      background: linear-gradient(90deg, #1a365d, #38ef7d, #c5a059);
+    }
+    
+    /* تصميم الإطار الدائري الفخم للوجو */
+    .logo-container {
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .logo-frame {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 3px solid #c5a059;
+      box-shadow: 0 8px 20px rgba(197, 160, 89, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 5px;
+    }
+    .logo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 50%;
+    }
+
+    .title {
+      color: #1a365d;
+      font-size: 24px;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+    .subtitle {
+      color: #718096;
+      font-size: 14px;
+      margin-bottom: 28px;
+    }
+    .role-switcher {
+      display: flex;
+      background: #edf2f7;
+      padding: 5px;
+      border-radius: 12px;
+      margin-bottom: 25px;
+    }
+    .role-btn {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      background: transparent;
+      font-weight: 700;
+      font-size: 14px;
+      color: #4a5568;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .role-btn.active {
+      background: #1a365d;
+      color: #ffffff;
+      box-shadow: 0 4px 10px rgba(26, 54, 93, 0.3);
+    }
+    .form-section {
+      display: none;
+      animation: fadeIn 0.4s ease-in-out forwards;
+    }
+    .form-section.active {
+      display: block;
+    }
+    label {
+      display: block;
+      text-align: right;
+      font-weight: 700;
+      color: #2d3748;
+      margin-bottom: 12px;
+      font-size: 15px;
+    }
+    input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1.5px solid #cbd5e0;
+      border-radius: 10px;
+      font-size: 15px;
+      margin-bottom: 18px;
+      outline: none;
+      transition: all 0.3s;
+      background: #f8fafc;
+      color: #1a365d;
+      font-weight: 600;
+    }
+    input:focus {
+      border-color: #c5a059;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.15);
+    }
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #c5a059, #9e7d3b);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(197, 160, 89, 0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(197, 160, 89, 0.6);
+    }
+
+    /* ⭐ تصميم شبكة أزرار المعلمين (Push Buttons) الاحترافية */
+    .teachers-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 380px;
+      overflow-y: auto;
+      padding-left: 5px;
+      margin-bottom: 15px;
+    }
+
+    .teacher-push-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #1a365d 0%, #2c5364 100%);
+      color: white;
+      border: 1px solid #c5a059;
+      padding: 14px 18px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 12px;
+      box-shadow: 0 4px 12px rgba(26, 54, 93, 0.3);
+      transition: all 0.3s ease;
+      text-align: right;
+    }
+
+    .teacher-push-btn:hover {
+      background: linear-gradient(135deg, #c5a059 0%, #9e7d3b 100%);
+      border-color: #1a365d;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(197, 160, 89, 0.4);
+    }
+
+    .teacher-push-btn:active {
+      transform: translateY(1px);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .teacher-push-btn.selected {
+      background: linear-gradient(135deg, #27ae60 0%, #1e8449 100%);
+      border-color: #f1c40f;
+    }
+    
+    /* تنسيق بطاقات الطلاب بروح احترافية فاخرة */
+    .card {
+      background: #ffffff !important;
+      border: 1px solid #e2e8f0 !important;
+      border-right: 5px solid #c5a059 !important;
+      padding: 18px !important;
+      margin-top: 15px !important;
+      border-radius: 14px !important;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05) !important;
+      text-align: right !important;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    /* زر كتابة ورفع التقرير */
+    .report-action-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #1a365d 0%, #2c5364 100%);
+      color: white;
+      border: 1px solid #c5a059;
+      padding: 12px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(26, 54, 93, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .report-action-btn:hover {
+      background: linear-gradient(135deg, #c5a059 0%, #9e7d3b 100%);
+      border-color: #1a365d;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(197, 160, 89, 0.4);
+    }
+
+    .report-action-btn:active {
+      transform: translateY(1px);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="portal-card">
+  <!-- اللوجو في الإطار الدائري الفخم -->
+  <div class="logo-container">
+    <div class="logo-frame">
+      <img src="logo.png" alt="شعار أكاديمية تبيان">
+    </div>
+  </div>
+  
+  <h1 class="title">أكاديمية تبيان التعليمية</h1>
+  <p class="subtitle">نظام التقارير الإدارية والحلقات القرآنية</p>
+
+  <div class="role-switcher">
+    <button class="role-btn active" onclick="switchRole('teacher')">📖 دخول معلم</button>
+    <button class="role-btn" onclick="switchRole('admin')">🛡️ دخول مشرف</button>
+  </div>
+
+  <div id="teacherForm" class="form-section active">
+    <label>اختر أو ابحث عن اسم المعلم / المعلمة:</label>
+    
+    <!-- ⭐ صندوق البحث الفوري المضاف خصيصاً للمعلمين -->
+    <div style="position: relative; margin-bottom: 12px;">
+      <input type="text" id="teacherSearchInput" placeholder="🔍 اكتب اسمك هنا للبحث السريع (مثلاً: أحمد، محمد...)" oninput="filterTeachersList()" style="margin-bottom: 5px;">
+      <div id="teacherSearchHint" style="font-size: 11px; color: #718096; text-align: right; padding-right: 5px;">اكتب جزءاً من اسمك لتصفية القائمة فوراً</div>
+    </div>
+
+    <!-- حاوية أزرار المعلمين الفخمة -->
+    <div id="teachersButtonsContainer" class="teachers-grid">
+      <p style="color:#718096; font-size:14px; padding: 10px;">-- جاري تحميل قائمة المعلمين أبجديًا... --</p>
+    </div>
+    <div id="sessionsContainer"></div>
+  </div>
+
+  <div id="adminForm" class="form-section">
+    <label for="adminPin">رمز المرور الخاص بالمشرف:</label>
+    <input type="password" id="adminPin" placeholder="أدخل الرقم السري لوحة الإدارة...">
+    <button class="btn-submit" onclick="loginAdmin()">دخول لوحة التحكم 🚀</button>
+  </div>
+</div>
+
+<script>
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyCdt2QV54EVx5D2StIsl0X6BqS9eNU5KvuIp7zV-sp_AgS4borSnyVFh3GzALDJr8daQ/exec";
+
+  let allData = [];
+  let allTeachersList = []; // لتخزين قائمة المعلمين الأساسية للبحث
+  let selectedTeacherName = "";
+  let currentTeacherRawSessions = []; // تخزين السطور الأصلية الخاصة بالمعلم الحالي للبحث اليدوي
+
+  window.addEventListener("DOMContentLoaded", function() {
+    requestNotificationPermission();
+
+    if (WEB_APP_URL !== "ضع_رابط_الـ_WEB_APP_URL_هنا") {
+      fetch(WEB_APP_URL)
+        .then(res => res.json())
+        .then(data => {
+          allData = data;
+          populateTeacherButtons(data);
+        })
+        .catch(err => console.error("Error fetching data:", err));
+    }
+  });
+
+  function requestNotificationPermission() {
+    if ("Notification" in window && Notification.permission === "default") {
+      Notification.requestPermission().then(permission => {
+        if (permission === "granted") {
+          console.log("Notifications permitted.");
+        }
+      });
+    }
+  }
+
+  // ⭐ دالة بناء قائمة أزرار المعلمين وتخزينها للبحث
+  function populateTeacherButtons(data) {
+    const container = document.getElementById("teachersButtonsContainer");
+    if (!container) return;
+    
+    if (!data || data.length === 0) {
+      container.innerHTML = '<p style="color:red; font-size:14px;">لا توجد بيانات متاحة.</p>';
+      return;
+    }
+
+    allTeachersList = [...new Set(data.map(item => item["المعلم"] || item["اسم المعلم"]))]
+      .filter(t => t && t.toString().trim() !== "" && isNaN(t));
+    
+    allTeachersList.sort((a, b) => a.localeCompare(b, 'ar', { sensitivity: 'base' }));
+    
+    renderFilteredTeachers(allTeachersList);
+  }
+
+  // ⭐ دالة عرض المعلمين بناءً على الفلترة أو البحث
+  function renderFilteredTeachers(teachersArray) {
+    const container = document.getElementById("teachersButtonsContainer");
+    const hintDiv = document.getElementById("teacherSearchHint");
+    container.innerHTML = '';
+
+    if (teachersArray.length === 0) {
+      container.innerHTML = '<p style="color:red; font-size:13px; text-align:center; padding:10px;">لا يوجد معلم بهذا الاسم، تأكد من الحروف.</p>';
+      if(hintDiv) hintDiv.innerText = "0 نتائج مطابقة";
+      return;
+    }
+
+    if(hintDiv) hintDiv.innerText = `تم العثور على ${teachersArray.length} معلم`;
+
+    teachersArray.forEach(t => {
+      const btn = document.createElement("button");
+      btn.className = "teacher-push-btn";
+      
+      if (selectedTeacherName === t) {
+        btn.classList.add('selected');
+      }
+
+      btn.innerHTML = `<span>🧑‍🏫</span> <span style="flex: 1; text-align: right;">${t}</span>`;
+      
+      btn.onclick = function() {
+        document.querySelectorAll('.teacher-push-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        
+        selectedTeacherName = t;
+        loadTeacherSessionsByName(t);
+      };
+
+      container.appendChild(btn);
+    });
+  }
+
+  // ⭐ دالة الفلترة الفورية عند الكتابة في خانة البحث
+  function filterTeachersList() {
+    const query = normalizeText(document.getElementById("teacherSearchInput").value);
+    
+    if (!query) {
+      renderFilteredTeachers(allTeachersList);
+      return;
+    }
+
+    const filtered = allTeachersList.filter(teacher => {
+      return normalizeText(teacher).includes(query);
+    });
+
+    renderFilteredTeachers(filtered);
+  }
+
+  function formatTo12Hour(timeStr) {
+    if (!timeStr) return "";
+    let str = timeStr.toString().trim();
+
+    if (str.includes("T") || str.includes("1899-")) {
+      let dateObj = new Date(str);
+      if (!isNaN(dateObj.getTime())) {
+        let h = dateObj.getUTCHours();
+        let m = dateObj.getUTCMinutes();
+        let period = h >= 12 ? "مساءً" : "صباحاً";
+        h = h % 12;
+        h = h ? h : 12;
+        let minStr = m < 10 ? "0" + m : m;
+        return `${h}:${minStr} ${period}`;
+      }
+    }
+
+    let cleanStr = str
+      .replace("م.", "").replace("ص.", "")
+      .replace("مساءً", "").replace("صباحاً", "").trim();
+    
+    let parts = cleanStr.split(":");
+    if (parts.length >= 2) {
+      let hours = parseInt(parts[0], 10);
+      let minutes = parts[1].substring(0, 2);
+      
+      let isPM = str.includes("مساء") || str.includes("م.") || str.toLowerCase().includes("pm");
+      let isAM = str.includes("صباح") || str.includes("ص.") || str.toLowerCase().includes("am");
+
+      if (!isNaN(hours)) {
+        if (isPM && hours < 12) {
+          hours += 12;
+        } else if (isAM && hours === 12) {
+          hours = 0;
+        } else if (!isPM && !isAM && hours < 7 && hours !== 0) {
+          hours += 12;
+        }
+
+        let period = hours >= 12 ? "مساءً" : "صباحاً";
+        let displayHours = hours % 12;
+        displayHours = displayHours ? displayHours : 12;
+        
+        return `${displayHours}:${minutes} ${period}`;
+      }
+    }
+    return str;
+  }
+
+  function loadTeacherSessionsByName(teacherName) {
+    const container = document.getElementById("sessionsContainer");
+    if (!container) return;
+    container.innerHTML = "";
+
+    if (!teacherName) return;
+
+    currentTeacherRawSessions = allData.filter(item => {
+      const tVal = item["المعلم"] || item["اسم المعلم"];
+      return tVal && tVal.toString().trim() === teacherName.trim();
+    });
+
+    if (currentTeacherRawSessions.length === 0) {
+      container.innerHTML = "<p style='color:red; margin-top:10px;'>لا توجد حلقات مسجلة لهذا المعلم.</p>";
+      return;
+    }
+
+    monitorTeacherSessions(currentTeacherRawSessions);
+    renderStudentsList(currentTeacherRawSessions);
+  }
+
+  // ⭐ دالة تطبيع وتنقية النصوص لتجاوز فروق الهمزات والمسافات والحروف
+  function normalizeText(text) {
+    if (!text) return "";
+    return text.toString()
+      .trim()
+      .toLowerCase()
+      .replace(/[إأآا]/g, 'ا')
+      .replace(/ى/g, 'ي')
+      .replace(/ؤ/g, 'و')
+      .replace(/ئ/g, 'ي')
+      .replace(/ة/g, 'ه')
+      .replace(/\s+/g, ' ');
+  }
+
+  // ⭐ دالة معالجة وعرض الطلاب مع خانة البحث اليدوي والتدقيق الشامل
+  function renderStudentsList(sessionsSource, searchFilterQuery = "") {
+    const container = document.getElementById("sessionsContainer");
+    
+    let existingSearchBox = document.getElementById("manualStudentSearchBox");
+    let existingResultsDiv = document.getElementById("dynamicStudentsResults");
+
+    if (!existingResultsDiv) {
+      container.innerHTML = `
+        <div style="margin-top: 15px; background: #f8fafc; padding: 12px; border-radius: 12px; border: 1px solid #cbd5e0;">
+          <label style="font-size: 13px; margin-bottom: 6px; color: #1a365d;">🔍 بحث يدوي مدقق عن طالب (لتجاوز أي خطأ في الحالة):</label>
+          <div style="display: flex; gap: 6px;">
+            <input type="text" id="manualStudentSearchBox" placeholder="اكتب اسم الطالب كاملاً أو جزءاً منه..." oninput="handleManualSearchInput()" style="margin-bottom: 0; padding: 10px; font-size: 13px;">
+            <button onclick="clearManualSearch()" style="background: #e2e8f0; border: none; padding: 0 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 12px;">إلغاء</button>
+          </div>
+        </div>
+        <div id="dynamicStudentsResults"></div>
+      `;
+    }
+
+    const resultsContainer = document.getElementById("dynamicStudentsResults");
+    resultsContainer.innerHTML = "";
+
+    let studentsMap = {};
+    const normalizedFilter = normalizeText(searchFilterQuery);
+
+    sessionsSource.forEach((session) => {
+      const student = session["الطالب"] || session["اسم الطالب"] || "";
+      if (!student) return;
+
+      const statusVal = (session["الحالة"] || session["حالة الطالب"] || "").toString().trim();
+      if (!searchFilterQuery && (statusVal === "معتذر" || statusVal.includes("متوقف") || statusVal === "لم يدرس")) {
+        return; 
+      }
+
+      if (normalizedFilter && !normalizeText(student).includes(normalizedFilter)) {
+        return;
+      }
+
+      const sessionNum = session["رقم الحلقةة"] || session["رقم الحلقة"] || "-";
+
+      if (!studentsMap[student]) {
+        studentsMap[student] = {
+          student: student,
+          sessionNum: sessionNum,
+          schedules: []
+        };
+      }
+
+      Object.keys(session).forEach(colKey => {
+        let cleanKey = colKey.trim();
+        let val = session[colKey];
+
+        if (val !== undefined && val !== null) {
+          let valStr = val.toString().trim();
+          if (valStr !== "" && valStr !== "undefined" && valStr !== "null" && valStr !== "-") {
+            
+            let targetDay = "";
+            if (cleanKey.includes("السبت")) targetDay = "السبت";
+            else if (cleanKey.includes("الأحد") || cleanKey.includes("الاحد")) targetDay = "الأحد";
+            else if (cleanKey.includes("الاثنين") || cleanKey.includes("الإثنين")) targetDay = "الاثنين";
+            else if (cleanKey.includes("الثلاثاء")) targetDay = "الثلاثاء";
+            else if (cleanKey.includes("الأربعاء") || cleanKey.includes("الاربعاء")) targetDay = "الأربعاء";
+            else if (cleanKey.includes("الخميس")) targetDay = "الخميس";
+            else if (cleanKey.includes("الجمعة")) targetDay = "الجمعة";
+
+            if (targetDay !== "") {
+              let formattedTime = formatTo12Hour(valStr);
+              let scheduleEntry = `${targetDay} (${formattedTime})`;
+              
+              let exists = studentsMap[student].schedules.some(s => s.startsWith(targetDay + " "));
+              if (!exists) {
+                studentsMap[student].schedules.push(scheduleEntry);
+              }
+            }
+          }
+        }
+      });
+    });
+
+    let activeStudents = Object.values(studentsMap);
+
+    if (activeStudents.length === 0) {
+      resultsContainer.innerHTML = "<p style='color:red; margin-top:15px; font-size:13px; text-align:center;'>لا توجد نتائج مطابقة لعملية البحث أو لا توجد مواعيد نشطة مسجلة.</p>";
+      return;
+    }
+
+    activeStudents.sort((a, b) => a.student.localeCompare(b.student, 'ar', { sensitivity: 'base' }));
+
+    activeStudents.forEach((data) => {
+      let startTime = data.schedules.length > 0 ? data.schedules.join(" | ") : "مواعيد مرنة / غير محددة بالأيام";
+
+      const card = document.createElement("div");
+      card.className = "card";
+      
+      card.innerHTML = `
+        <h4 style="color:#1a365d; margin-bottom:5px; font-size:15px;">👤 الطالب: ${data.student}</h4>
+        <p style="color:#666; font-size:13px; margin-bottom:10px;">📌 الحلقة: ${data.sessionNum} | ⏱ المواعيد: <span style="color:#c5a059; font-weight:bold;">${startTime}</span></p>
+        <div style="font-size:11px; color:#e53e3e; margin-bottom:10px; font-weight:bold;">⚠️ تنبيه: يرجى إرسال التقرير خلال 30 دقيقة من انتهاء الحصة لتفادي تطبيق الخصم.</div>
+        
+        <button class="report-action-btn" onclick="goToReportPage('${data.student}', '${data.sessionNum}', '${selectedTeacherName}')">
+          📑 كتابة ورفع التقرير
+        </button>
+      `;
+      resultsContainer.appendChild(card);
+    });
+  }
+
+  function handleManualSearchInput() {
+    const query = document.getElementById("manualStudentSearchBox").value;
+    renderStudentsList(currentTeacherRawSessions, query);
+  }
+
+  function clearManualSearch() {
+    const searchBox = document.getElementById("manualStudentSearchBox");
+    if (searchBox) searchBox.value = "";
+    renderStudentsList(currentTeacherRawSessions, "");
+  }
+
+  let notificationInterval = null;
+  function monitorTeacherSessions(sessions) {
+    if (!("Notification" in window) || Notification.permission !== "granted") return;
+    
+    if (notificationInterval) clearInterval(notificationInterval);
+
+    notificationInterval = setInterval(() => {
+      const now = new Date();
+      const currentDayIndex = now.getDay();
+      const daysArr = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
+      const currentDayName = daysArr[currentDayIndex];
+      
+      const currentHour = now.getHours();
+      const currentMinute = now.getMinutes();
+      const currentTotalMinutes = currentHour * 60 + currentMinute;
+
+      sessions.forEach(session => {
+        let statusVal = (session["الحالة"] || session["حالة الطالب"] || "").toString().trim();
+        if (statusVal === "معتذر" || statusVal.includes("متوقف") || statusVal === "لم يدرس") return;
+
+        let student = session["الطالب"] || session["اسم الطالب"] || "";
+        let sessionNum = session["رقم الحلقة"] || "";
+        
+        let dayTimeStr = "";
+        Object.keys(session).forEach(k => {
+          if (k.includes(currentDayName) && session[k]) {
+            dayTimeStr = session[k].toString().trim();
+          }
+        });
+
+        if (dayTimeStr) {
+          let timeMinutes = parseTimeStringToMinutes(dayTimeStr);
+          if (timeMinutes !== null) {
+            let sessionDuration = 60; 
+            let endTotalMinutes = timeMinutes + sessionDuration;
+
+            if (currentTotalMinutes === endTotalMinutes) {
+              new Notification(`انتهت حصة الطالب: ${student}`, {
+                body: `انتهت حصة حلقة (${sessionNum}) الآن. يرجى إرسال التقرير خلال 30 دقيقة لتفادي الخصم!`,
+                icon: "logo.png",
+                requireInteraction: true
+              });
+            }
+          }
+        }
+      });
+    }, 60000);
+  }
+
+  function parseTimeStringToMinutes(str) {
+    let clean = str.replace("م.", "").replace("ص.", "").replace("مساءً", "").replace("صباحاً", "").trim();
+    let parts = clean.split(":");
+    if (parts.length >= 2) {
+      let h = parseInt(parts[0], 10);
+      let m = parseInt(parts[1], 10);
+      if (!isNaN(h) && !isNaN(m)) {
+        if ((str.includes("مساءً") || str.includes("م.")) && h < 12) h += 12;
+        if ((str.includes("صباحاً") || str.includes("ص.")) && h === 12) h = 0;
+        return h * 60 + m;
+      }
+    }
+    return null;
+  }
+
+  function goToReportPage(student, sessionNum, teacher) {
+    const sessionData = {
+      student: student,
+      sessionNum: sessionNum,
+      teacher: teacher,
+      openTime: new Date().getTime()
+    };
+    sessionStorage.setItem("currentSession", JSON.stringify(sessionData));
+    window.location.href = "reports.html";
+  }
+
+  function switchRole(role) {
+    const btns = document.querySelectorAll('.role-btn');
+    const teacherForm = document.getElementById('teacherForm');
+    const adminForm = document.getElementById('adminForm');
+
+    btns.forEach(b => b.classList.remove('active'));
+    
+    if (role === 'teacher') {
+      btns[0].classList.add('active');
+      teacherForm.classList.add('active');
+      adminForm.classList.remove('active');
+    } else {
+      btns[1].classList.add('active');
+      adminForm.classList.add('active');
+      teacherForm.classList.remove('active');
+    }
+  }
+
+  function loginAdmin() {
+    const pin = document.getElementById('adminPin').value;
+    if (!pin) {
+      alert("يرجى إدخال الرقم السري أولاً!");
+      return;
+    }
+    window.location.href = `admin.html?pin=${encodeURIComponent(pin)}`;
+  }
+</script>
+</body>
+</html>

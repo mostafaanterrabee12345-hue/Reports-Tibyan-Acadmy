@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة المشرفين الرسمية - أكاديمية تبيان</title>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; margin: 0; padding: 20px; direction: rtl; color: #333; }
+    .container { max-width: 1200px; margin: auto; background: #fff; padding: 30px; border-radius: 16px; box-shadow: 0 8px 25px rgba(0,0,0,0.08); border-top: 6px solid #c5a059; }
+    
+    /* رأسية اللوحة مع اللوجو */
+    .header-section { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #eaeaea; padding-bottom: 20px; margin-bottom: 25px; }
+    .logo-area { display: flex; align-items: center; gap: 15px; }
+    .logo-area img { width: 60px; height: 60px; object-fit: contain; border-radius: 50%; border: 2px solid #c5a059; padding: 3px; background: #fff; }
+    .logo-area h1 { color: #1a365d; font-size: 22px; margin: 0; }
+    .logo-area p { color: #718096; font-size: 13px; margin: 3px 0 0 0; }
+
+    /* شريط الإحصائيات */
+    .stats-bar { display: flex; gap: 20px; margin-bottom: 25px; }
+    .stat-card { flex: 1; padding: 20px; border-radius: 12px; color: white; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+    .bg-blue { background: linear-gradient(135deg, #1a365d, #2a4365); }
+    .bg-green { background: linear-gradient(135deg, #276749, #2f855a); }
+    .bg-red { background: linear-gradient(135deg, #9b2c2c, #c53030); }
+    .stat-title { font-size: 14px; opacity: 0.9; }
+    .stat-value { font-size: 28px; font-weight: bold; margin-top: 8px; }
+
+    /* شريط البحث */
+    .search-box { width: 100%; padding: 12px 18px; border-radius: 8px; border: 1px solid #cbd5e0; font-size: 15px; margin-bottom: 20px; outline: none; transition: border-color 0.3s; }
+    .search-box:focus { border-color: #c5a059; box-shadow: 0 0 5px rgba(197,160,89,0.3); }
+
+    /* الجدول */
+    .table-responsive { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; background: white; }
+    th, td { padding: 14px 12px; text-align: center; border-bottom: 1px solid #e2e8f0; font-size: 14px; }
+    th { background: #1a365d; color: white; font-weight: 600; }
+    tr:hover { background: #f8fafc; }
+    
+    /* حالات التقرير والخصم */
+    .badge-ontime { background: #c6f6d5; color: #22543d; padding: 5px 10px; border-radius: 6px; font-weight: bold; font-size: 12px; }
+    .badge-late { background: #fed7d7; color: #822727; padding: 5px 10px; border-radius: 6px; font-weight: bold; font-size: 12px; }
+    .btn-view { background: #c5a059; color: white; padding: 6px 14px; text-decoration: none; border-radius: 6px; font-size: 13px; font-weight: bold; transition: background 0.2s; display: inline-block; }
+    .btn-view:hover { background: #b08d46; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  
+  <!-- رأسية اللوحة مع اللوجو -->
+  <div class="header-section">
+    <div class="logo-area">
+      <img src="assets/img/logo/logo.png" alt="شعار أكاديمية تبيان" onerror="this.src='https://via.placeholder.com/60?text=Tebyan'">
+      <div>
+        <h1>أكاديمية تبيان للقرآن الكريم</h1>
+        <p>لوحة تحكم المشرفين والإدارة ومتابعة التقارير والخصومات</p>
+      </div>
+    </div>
+    <div style="color: #718096; font-size: 14px; font-weight: bold;">
+      🛡️ منطقة إدارية مؤمنة
+    </div>
+  </div>
+
+  <!-- إحصائيات عامة -->
+  <div class="stats-bar">
+    <div class="stat-card bg-blue">
+      <div class="stat-title">إجمالي التقارير</div>
+      <div id="totalReportsCount" class="stat-value">0</div>
+    </div>
+    <div class="stat-card bg-green">
+      <div class="stat-title">المرفوعة في الموعد (بدون خصم)</div>
+      <div id="onTimeCount" class="stat-value">0</div>
+    </div>
+    <div class="stat-card bg-red">
+      <div class="stat-title">حالات التأخير والخصم (> 30 دقيقة)</div>
+      <div id="deductionCount" class="stat-value">0</div>
+    </div>
+  </div>
+
+  <!-- خانة البحث -->
+  <input type="text" id="adminSearch" class="search-box" onkeyup="filterAdminReports()" placeholder="🔍 ابحث باسم المعلم أو الطالب...">
+
+  <!-- جدول عرض التقارير -->
+  <div class="table-responsive">
+    <table>
+      <thead>
+        <tr>
+          <th>التاريخ والوقت</th>
+          <th>اسم المعلم</th>
+          <th>اسم الطالب</th>
+          <th>رقم الحلقة</th>
+          <th>نوع التقرير</th>
+          <th>حالة التقرير</th>
+          <th>قيمة الخصم</th>
+          <th>رابط التقرير</th>
+        </tr>
+      </thead>
+      <tbody id="reportsTableBody">
+        <tr><td colspan="8" style="color: #718096;">جاري التحقق والتحميل من السيرفر...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyCdt2QV54EVx5D2StIsl0X6BqS9eNU5KvuIp7zV-sp_AgS4borSnyVFh3GzALDJr8daQ/exec";
+
+  window.onload = function() {
+    let password = prompt("🔒 يرجى إدخال كلمة المرور لدخول لوحة المشرفين:");
+    if (password !== "Tibyan2026@") { 
+      document.body.innerHTML = "<div style='text-align:center; margin-top:100px;'><h2 style='color:#e53e3e;'>🚫 كلمة المرور غير صحيحة أو تم إلغاء الدخول</h2><p>يرجى إعادة تحميل الصفحة والمحاولة مرة أخرى.</p></div>";
+      return;
+    }
+    loadAdminDashboard();
+  };
+
+  function loadAdminDashboard() {
+    const tbody = document.getElementById("reportsTableBody");
+    
+    fetch(WEB_APP_URL)
+      .then(res => res.json())
+      .then(data => {
+        if (!data || data.length === 0) {
+          tbody.innerHTML = "<tr><td colspan='8'>لا توجد بيانات مسجلة حالياً في الشيت.</td></tr>";
+          return;
+        }
+
+        window.adminAllReports = data; 
+        renderAdminTable(data);
+      })
+      .catch(err => {
+        console.error("Fetch Error:", err);
+        tbody.innerHTML = "<tr><td colspan='8' style='color:red;'>حدث خطأ أثناء جلب البيانات من السيرفر. (تأكد من نشر السكريبت كـ Anyone)</td></tr>";
+      });
+  }
+
+  function renderAdminTable(reports) {
+    const tbody = document.getElementById("reportsTableBody");
+    tbody.innerHTML = "";
+
+    let total = reports.length;
+    let onTime = 0;
+    let deductions = 0;
+
+    reports.forEach((rep) => {
+      let timeSubmitted = rep["التاريخ والوقت"] || "-";
+      let teacher = rep["اسم المعلم"] || "غير محدد";
+      let student = rep["اسم الطالب"] || "غير محدد";
+      let sessionNum = rep["رقم الحلقة"] || "-";
+      let reportType = rep["نوع التقرير"] || "-";
+      let statusText = rep["حالة التقرير"] || "في الموعد";
+      let discountVal = rep["قيمة الخصم"] || "0";
+      let reportLink = rep["رابط التقرير"] || "#";
+
+      let statusBadge = `<span class='badge-ontime'>${statusText}</span>`;
+      if (statusText.includes("متأخر") || (discountVal !== "0" && discountVal !== "0.00" && discountVal !== "0")) {
+        deductions++;
+        statusBadge = `<span class='badge-late'>${statusText}</span>`;
+      } else {
+        onTime++;
+      }
+
+      let linkHtml = reportLink.startsWith("http") 
+        ? `<a href="${reportLink}" target="_blank" class="btn-view">عرض التقرير</a>` 
+        : `<span>${reportLink}</span>`;
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${timeSubmitted}</td>
+        <td style="font-weight:600; color:#1a365d;">${teacher}</td>
+        <td>${student}</td>
+        <td>${sessionNum}</td>
+        <td>${reportType}</td>
+        <td>${statusBadge}</td>
+        <td style="color: #e53e3e; font-weight:bold;">${discountVal}</td>
+        <td>${linkHtml}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    document.getElementById("totalReportsCount").textContent = total;
+    document.getElementById("onTimeCount").textContent = onTime;
+    document.getElementById("deductionCount").textContent = deductions;
+  }
+
+  function filterAdminReports() {
+    let query = document.getElementById("adminSearch").value.toLowerCase();
+    if (!window.adminAllReports) return;
+
+    let filtered = window.adminAllReports.filter(rep => {
+      let t = (rep["اسم المعلم"] || "").toLowerCase();
+      let s = (rep["اسم الطالب"] || "").toLowerCase();
+      return t.includes(query) || s.includes(query);
+    });
+
+    renderAdminTable(filtered);
+  }
+</script>
+</body>
+</html>
