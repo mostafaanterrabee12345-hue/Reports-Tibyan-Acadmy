@@ -38,6 +38,7 @@
     /* حالات التقرير والخصم */
     .badge-ontime { background: #c6f6d5; color: #22543d; padding: 5px 10px; border-radius: 6px; font-weight: bold; font-size: 12px; }
     .badge-late { background: #fed7d7; color: #822727; padding: 5px 10px; border-radius: 6px; font-weight: bold; font-size: 12px; }
+    .badge-exempt { background: #feebc8; color: #744210; padding: 5px 10px; border-radius: 6px; font-weight: bold; font-size: 12px; }
     .btn-view { background: #c5a059; color: white; padding: 6px 14px; text-decoration: none; border-radius: 6px; font-size: 13px; font-weight: bold; transition: background 0.2s; display: inline-block; }
     .btn-view:hover { background: #b08d46; }
   </style>
@@ -46,10 +47,9 @@
 
 <div class="container">
   
-  <!-- رأسية اللوحة مع اللوجو -->
   <div class="header-section">
     <div class="logo-area">
-      <img src="assets/img/logo/logo.png" alt="شعار أكاديمية تبيان" onerror="this.src='https://via.placeholder.com/60?text=Tebyan'">
+      <img src="logo.png" alt="شعار أكاديمية تبيان">
       <div>
         <h1>أكاديمية تبيان للقرآن الكريم</h1>
         <p>لوحة تحكم المشرفين والإدارة ومتابعة التقارير والخصومات</p>
@@ -60,7 +60,6 @@
     </div>
   </div>
 
-  <!-- إحصائيات عامة -->
   <div class="stats-bar">
     <div class="stat-card bg-blue">
       <div class="stat-title">إجمالي التقارير</div>
@@ -71,15 +70,13 @@
       <div id="onTimeCount" class="stat-value">0</div>
     </div>
     <div class="stat-card bg-red">
-      <div class="stat-title">حالات التأخير والخصم (> 30 دقيقة)</div>
+      <div class="stat-title">حالات التأخير والخصم</div>
       <div id="deductionCount" class="stat-value">0</div>
     </div>
   </div>
 
-  <!-- خانة البحث -->
   <input type="text" id="adminSearch" class="search-box" onkeyup="filterAdminReports()" placeholder="🔍 ابحث باسم المعلم أو الطالب...">
 
-  <!-- جدول عرض التقارير -->
   <div class="table-responsive">
     <table>
       <thead>
@@ -103,10 +100,11 @@
 
 <script>
   const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyCdt2QV54EVx5D2StIsl0X6BqS9eNU5KvuIp7zV-sp_AgS4borSnyVFh3GzALDJr8daQ/exec";
+  let adminEnteredPassword = "";
 
   window.onload = function() {
-    let password = prompt("🔒 يرجى إدخال كلمة المرور لدخول لوحة المشرفين:");
-    if (password !== "Tibyan2026@") { 
+    adminEnteredPassword = prompt("🔒 يرجى إدخال كلمة المرور لدخول لوحة المشرفين:");
+    if (adminEnteredPassword !== "Tibyan2026@") { 
       document.body.innerHTML = "<div style='text-align:center; margin-top:100px;'><h2 style='color:#e53e3e;'>🚫 كلمة المرور غير صحيحة أو تم إلغاء الدخول</h2><p>يرجى إعادة تحميل الصفحة والمحاولة مرة أخرى.</p></div>";
       return;
     }
@@ -116,11 +114,20 @@
   function loadAdminDashboard() {
     const tbody = document.getElementById("reportsTableBody");
     
-    fetch(WEB_APP_URL)
+    // إرسال الطلب مع إجراء جلب التقارير والرقم السري الصحيح
+    const fetchUrl = `${WEB_APP_URL}?action=getReports&password=${encodeURIComponent(adminEnteredPassword)}`;
+
+    fetch(fetchUrl)
       .then(res => res.json())
       .then(data => {
+        // التحقق إذا رجع رسالة خطأ بسبب الرقم السري
+        if (data.status === "error") {
+          tbody.innerHTML = `<tr><td colspan='8' style='color:red;'>${data.message}</td></tr>`;
+          return;
+        }
+
         if (!data || data.length === 0) {
-          tbody.innerHTML = "<tr><td colspan='8'>لا توجد بيانات مسجلة حالياً في الشيت.</td></tr>";
+          tbody.innerHTML = "<tr><td colspan='8'>لا توجد تقارير مسجلة حالياً في الشيت.</td></tr>";
           return;
         }
 
@@ -129,7 +136,7 @@
       })
       .catch(err => {
         console.error("Fetch Error:", err);
-        tbody.innerHTML = "<tr><td colspan='8' style='color:red;'>حدث خطأ أثناء جلب البيانات من السيرفر. (تأكد من نشر السكريبت كـ Anyone)</td></tr>";
+        tbody.innerHTML = "<tr><td colspan='8' style='color:red;'>حدث خطأ أثناء جلب التقارير من السيرفر.</td></tr>";
       });
   }
 
@@ -152,9 +159,13 @@
       let reportLink = rep["رابط التقرير"] || "#";
 
       let statusBadge = `<span class='badge-ontime'>${statusText}</span>`;
-      if (statusText.includes("متأخر") || (discountVal !== "0" && discountVal !== "0.00" && discountVal !== "0")) {
+      
+      if (statusText.includes("متأخر") || statusText.includes("غير مرفوع") || discountVal.includes("خصم")) {
         deductions++;
         statusBadge = `<span class='badge-late'>${statusText}</span>`;
+      } else if (statusText.includes("عذر") || statusText.includes("تعويض") || statusText.includes("تأجيل")) {
+        statusBadge = `<span class='badge-exempt'>${statusText}</span>`;
+        onTime++; // تعتبر منتظمة أو معفاة ولا تحتسب كخصم
       } else {
         onTime++;
       }
@@ -171,7 +182,7 @@
         <td>${sessionNum}</td>
         <td>${reportType}</td>
         <td>${statusBadge}</td>
-        <td style="color: #e53e3e; font-weight:bold;">${discountVal}</td>
+        <td style="font-weight:bold; color:${discountVal.includes('خصم') ? '#e53e3e' : '#276749'};">${discountVal}</td>
         <td>${linkHtml}</td>
       `;
       tbody.appendChild(tr);
