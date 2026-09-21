@@ -1159,7 +1159,7 @@
 </div>
 
 <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbyCdt2QV54EVx5D2StIsl0X6BqS9eNU5KvuIp7zV-sp_AgS4borSnyVFh3GzALDJr8daQ/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbxGbPyXPEKb-kj7uaGotMEoP1CCbsph88aTitSvHflNHnmYYPn_h8M4qFhYOKsimIlI/exec";
     let activeMode = 'daily';
 
     // دالة تحويل تنسيق الوقت إلى نظام 12 ساعة مع (صباحاً / مساءً)
@@ -1449,8 +1449,7 @@
     async function sendReportToSheet() {
         const card = getActiveCard();
         try {
-            // نأخذ لقطة خفيفة للتقرير لضمان سرعة الإرسال وعدم تجاوز حدود الحجم
-            const canvas = await html2canvas(card, { scale: 1.5, useCORS: true, backgroundColor: null });
+            const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: null });
             const imageData = canvas.toDataURL('image/png');
 
             let tName = "", sName = "", sNum = "", rType = "", stVal = "";
@@ -1501,17 +1500,14 @@
                 imageData: imageData
             };
 
-            // استخدام fetch طبيعي بدون no-cors عشان الرد يرجع بانتظام والسيرفر يسجل بضمان
             await fetch(API_URL, {
                 method: 'POST',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // لتجنب قيود الـ CORS في جوجل سكريبت
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
-            console.log("تم إرسال التقرير بنجاح للشيت!");
         } catch (err) {
             console.error("خطأ في إرسال التقرير للشيت:", err);
-        }
-    }
         }
     }
 
