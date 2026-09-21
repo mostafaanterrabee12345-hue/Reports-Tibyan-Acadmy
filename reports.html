@@ -1333,16 +1333,20 @@
         const lesson = document.getElementById('noorLessonInput').value;
         document.getElementById('noorCardLesson').innerText = lesson.trim() !== "" ? lesson : "----------------";
 
-        const review = document.getElementById('noorReviewInput').value;
-        document.getElementById('noorCardReview').innerText = review.trim() !== "" ? review : "----------------";
+        const review = document.getElementById('noorReviewInput') ? document.getElementById('noorReviewInput').value : "";
+        if(document.getElementById('noorCardReview')) {
+            document.getElementById('noorCardReview').innerText = review.trim() !== "" ? review : "----------------";
+        }
 
         document.getElementById('noorCardRating').innerText = document.getElementById('noorRatingInput').value;
 
         const nextLesson = document.getElementById('noorNextLessonInput').value;
         document.getElementById('noorCardNextLesson').innerText = nextLesson.trim() !== "" ? nextLesson : "----------------";
 
-        const nextReview = document.getElementById('noorNextReviewInput').value;
-        document.getElementById('noorCardNextReview').innerText = nextReview.trim() !== "" ? nextReview : "----------------";
+        const nextReview = document.getElementById('noorNextReviewInput') ? document.getElementById('noorNextReviewInput').value : "";
+        if(document.getElementById('noorCardNextReview')) {
+            document.getElementById('noorCardNextReview').innerText = nextReview.trim() !== "" ? nextReview : "----------------";
+        }
 
         document.getElementById('ncp_fajr').innerText = document.getElementById('np_fajr').value;
         document.getElementById('ncp_dhuhr').innerText = document.getElementById('np_dhuhr').value;
@@ -1513,7 +1517,7 @@
         const name = getStudentName();
         let typeText = "تقرير";
         if (activeMode === 'daily') typeText = "تقرير_يومي";
-        else if (activeMode === 'noor') typeText = "تقرير_نور_البيان وبرامج أخرى";
+        else if (activeMode === 'noor') typeText = "تقرير_نور_البيان_وبرامج_اخرى";
         else if (activeMode === 'monthly') typeText = "تقرير_شهري";
         else if (activeMode === 'absence') typeText = "تقرير_غياب_بدون_عذر";
         else if (activeMode === 'excused') typeText = "تقرير_غياب_بعذر_وتعويض";
