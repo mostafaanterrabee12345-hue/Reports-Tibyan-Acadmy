@@ -1449,7 +1449,8 @@
     async function sendReportToSheet() {
         const card = getActiveCard();
         try {
-            const canvas = await html2canvas(card, { scale: 2, useCORS: true, backgroundColor: null });
+            // نأخذ لقطة خفيفة للتقرير لضمان سرعة الإرسال وعدم تجاوز حدود الحجم
+            const canvas = await html2canvas(card, { scale: 1.5, useCORS: true, backgroundColor: null });
             const imageData = canvas.toDataURL('image/png');
 
             let tName = "", sName = "", sNum = "", rType = "", stVal = "";
@@ -1500,14 +1501,17 @@
                 imageData: imageData
             };
 
+            // استخدام fetch طبيعي بدون no-cors عشان الرد يرجع بانتظام والسيرفر يسجل بضمان
             await fetch(API_URL, {
                 method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // لتجنب قيود الـ CORS في جوجل سكريبت
                 body: JSON.stringify(payload)
             });
+            console.log("تم إرسال التقرير بنجاح للشيت!");
         } catch (err) {
             console.error("خطأ في إرسال التقرير للشيت:", err);
+        }
+    }
         }
     }
 
